@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace StockMarket.Entities.Concrete
 {
-    public class AppRole : IdentityRole<int>
+    public class AppRole : IdentityRole<int> //rol sınıfımız
     {
 
     }
