@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace StockMarket.DataAccess.Repositories
 {
-    public class GenericReporsitory<T> : IGenericDal<T> where T : class
+    public class GenericRepository<T> : IGenericDal<T> where T : class
 
     {
         public void Delete(T t)
@@ -26,17 +26,22 @@ namespace StockMarket.DataAccess.Repositories
 
         public List<T> GetList()
         {
-            throw new NotImplementedException();
+            using var context = new Context();
+            return context.Set<T>().ToList();
         }
 
         public void Insert(T t)
         {
-            throw new NotImplementedException();
+            using var context = new Context();
+            context.Set<T>().Add(t);
+            context.SaveChanges();  
         }
 
         public void Update(T t)
         {
-            throw new NotImplementedException();
+            using var context = new Context();
+            context.Set<T>().Update(t);
+            context.SaveChanges(); 
         }
     }
 }

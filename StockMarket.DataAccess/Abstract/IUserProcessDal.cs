@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace StockMarket.DataAccess.Abstract
 {
-    public interface IUserProcessDal : IGenericDal<UserProcess>
+    public interface IUserProcessDal : IGenericDal<UserProcess> //userprocess'den miras aldırdık
     {
 
     }

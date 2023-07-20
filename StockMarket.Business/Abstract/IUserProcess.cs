@@ -5,10 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StockMarket.DataAccess.Abstract
+namespace StockMarket.Business.Abstract
 {
-    public interface IUserDal : IGenericDal<User> //userden miras aldırdık
+    public interface IUserProcess:IGenericService<UserProcess>
     {
-
     }
 }
