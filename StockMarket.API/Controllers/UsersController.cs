@@ -7,5 +7,6 @@ namespace StockMarket.API.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
+        
     }
 }
