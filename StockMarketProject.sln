@@ -11,9 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockMarket.Business", "Sto
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockMarket.DataTransferObject", "StockMarket.DataTransferObject\StockMarket.DataTransferObject.csproj", "{018437D6-F8E3-4DA6-88B4-1020B0C797CB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockMarket.Presentation", "StockMarket.Presentation\StockMarket.Presentation.csproj", "{3BFE9907-D029-4CEE-AC76-E9E14CE938FD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockMarket.API", "StockMarket.API\StockMarket.API.csproj", "{80D630AF-EAD9-4EA6-8DF3-EB29F812F422}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockMarket.API", "StockMarket.API\StockMarket.API.csproj", "{80D630AF-EAD9-4EA6-8DF3-EB29F812F422}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,10 +35,6 @@ Global
 		{018437D6-F8E3-4DA6-88B4-1020B0C797CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{018437D6-F8E3-4DA6-88B4-1020B0C797CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{018437D6-F8E3-4DA6-88B4-1020B0C797CB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3BFE9907-D029-4CEE-AC76-E9E14CE938FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3BFE9907-D029-4CEE-AC76-E9E14CE938FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3BFE9907-D029-4CEE-AC76-E9E14CE938FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3BFE9907-D029-4CEE-AC76-E9E14CE938FD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{80D630AF-EAD9-4EA6-8DF3-EB29F812F422}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{80D630AF-EAD9-4EA6-8DF3-EB29F812F422}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80D630AF-EAD9-4EA6-8DF3-EB29F812F422}.Release|Any CPU.ActiveCfg = Release|Any CPU
