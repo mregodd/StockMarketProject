@@ -9,36 +9,77 @@ namespace StockMarket.API.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
 
-        public AuthController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public AuthController(UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _userManager = userManager;
-            _roleManager = roleManager;
+            _signInManager = signInManager;
         }
 
-        [HttpPost("CreateAdminUser")]
-        public async Task<IActionResult> CreateAdminUser([FromBody] User model)
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
-            // Kullanıcı oluşturma işlemi
-            var user = new IdentityUser { UserName = model.Username, Email = model.Email };
-            var result = await _userManager.CreateAsync(user, model.Password);
-
-            if (result.Succeeded)
+            if (ModelState.IsValid)
             {
-                // Eğer kullanıcı başarıyla oluşturulursa, Admin rolünü atayalım
-                if (!await _roleManager.RoleExistsAsync("Admin"))
-                    await _roleManager.CreateAsync(new IdentityRole("Admin"));
+                var user = new User
+                {
+                    UserNumber = model.UserNumber,
+                    // Diğer kullanıcı bilgilerini buraya ekleyin, gerekirse kullanıcı oluşturulmadan önce doğrulama yapın.
+                };
 
-                await _userManager.AddToRoleAsync(user, "Admin");
+                var result = await _userManager.CreateAsync(user, model.Password);
 
-                return Ok("Admin kullanıcı başarıyla oluşturuldu ve rol atandı.");
+                if (result.Succeeded)
+                {
+                    // Kullanıcı başarıyla oluşturuldu, isterseniz burada diğer işlemleri gerçekleştirebilirsiniz.
+                    return Ok("Kullanıcı başarıyla oluşturuldu.");
+                }
+
+                // Kullanıcı oluşturulamadı, hataları döndürün.
+                return BadRequest(result.Errors);
             }
 
-            return BadRequest("Kullanıcı oluşturulamadı.");
+            // Model geçersiz, hataları döndürün.
+            return BadRequest(ModelState);
         }
 
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login([FromBody] LoginModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _signInManager.PasswordSignInAsync(model.UserNumber, model.Password, isPersistent: false, lockoutOnFailure: false);
+
+                if (result.Succeeded)
+                {
+                    // Giriş başarılı, isterseniz burada diğer işlemleri gerçekleştirebilirsiniz.
+                    return Ok("Giriş başarılı.");
+                }
+
+                // Giriş başarısız, hata döndürün.
+                return BadRequest("Giriş başarısız.");
+            }
+
+            // Model geçersiz, hataları döndürün.
+            return BadRequest(ModelState);
+        }
     }
 
+    // Bu modeli RegisterModel olarak varsayalım, yeni kullanıcı oluşturmak için gerekli bilgileri içerir.
+    public class RegisterModel
+    {
+        public string UserNumber { get; set; }
+        public decimal UserBalance { get; set; }
+        public string Password { get; set; }
+    }
+
+    // Bu modeli LoginModel olarak varsayalım, kullanıcı girişi için gerekli bilgileri içerir.
+    public class LoginModel
+    {
+        public string UserNumber { get; set; }
+        public string Password { get; set; }
+
+    }
 }

@@ -9,9 +9,25 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNet.Identity;
+using Microsoft.EntityFrameworkCore;
+using StockMarket.DataAccess.Concrete;
+using Microsoft.OpenApi.Models;
+using StockMarket.Business.Concrete;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+builder.Services.AddDbContext<Context>(options =>
+    options.UseSqlServer("Server=DERBEDEK;Database=StockMarketDB;User Id=DBTest;Password=112233;TrustServerCertificate=True;"));
+
+builder.Services.AddIdentity<AppUser, AppRole>()
+    .AddEntityFrameworkStores<Context>()
+    .AddDefaultTokenProviders()
+    .AddUserManager<CustomUserManager>();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API Name", Version = "v1" });
+});
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer
     (options =>
@@ -32,24 +48,23 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     });
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddIdentity<AppUser, AppRole>();
-builder.Services.AddTransient<User>();  
 
 
-var app = builder.Build();
 
 
 // Configure the HTTP request pipeline.
+var app = builder.Build();
+
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseDeveloperExceptionPage();
 }
 
-app.UseHttpsRedirection();
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API Name v1");
+});
 app.UseAuthentication();
 app.UseAuthorization();
 
