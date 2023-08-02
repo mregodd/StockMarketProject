@@ -9,6 +9,7 @@ namespace StockMarket.Entities.Concrete
 {
     public class UserBalance
     {
+        [Key]
         public int UserID { get; set; }
         public decimal Balance { get; set; }
     }

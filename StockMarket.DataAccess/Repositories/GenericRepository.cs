@@ -54,11 +54,11 @@ namespace StockMarket.DataAccess.Repositories
         }
     }
 
-    public class PortfolioService
+    public class PortfolioManager
     {
         private readonly Context _context;
 
-        public PortfolioService(Context context)
+        public PortfolioManager(Context context)
         {
             _context = context;
         }
@@ -71,47 +71,6 @@ namespace StockMarket.DataAccess.Repositories
         }
 
         // Diğer portföy işlemleri için metotlar buraya eklenebilir
-    }
-
-    public class BalanceManager : IBalanceDal
-    {
-        private readonly Context _context;
-
-        public BalanceManager(Context context)
-        {
-            _context = context;
-        }
-
-        public UserBalance GetUserBalance(int userId)
-        {
-            // Kullanıcı bakiye bilgisini veritabanından çekme işlemi
-            var userBalance = _context.UserBalances.FirstOrDefault(b => b.UserID == userId);
-            return userBalance;
-        }
-
-        public SystemBalance GetSystemBalance()
-        {
-            // Sistem bakiye bilgisini veritabanından çekme işlemi veya başka bir kaynaktan alabilirsiniz
-            var systemBalance = new SystemBalance();
-            return systemBalance;
-        }
-
-        public void AddUserBalance(UserBalance userBalance)
-        {
-            _context.UserBalances.Add(userBalance);
-            _context.SaveChanges();
-        }
-
-        public void SubtractUserBalance(int userId, decimal amount)
-        {
-            // Kullanıcı bakiyesini veritabanında güncelleme işlemi
-            var userBalance = _context.UserBalances.FirstOrDefault(b => b.UserID == userId);
-            if (userBalance != null)
-            {
-                userBalance.Balance -= amount;
-                _context.SaveChanges();
-            }
-        }
-    }
+    } 
 
 }

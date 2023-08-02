@@ -12,7 +12,7 @@ namespace StockMarket.API.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly PortfolioService _portfolioService;
+        private readonly PortfolioManager _portfolioManager;
 
         public AuthController(UserManager<User> userManager, SignInManager<User> signInManager)
         {
@@ -45,7 +45,7 @@ namespace StockMarket.API.Controllers
                         Value = 1000
                     };
 
-                    _portfolioService.AddPortfolio(portfolio);
+                    _portfolioManager.AddPortfolio(portfolio);
 
                     return RedirectToAction("Login", "Auth"); // AuthController içinde Login actionı
                 }

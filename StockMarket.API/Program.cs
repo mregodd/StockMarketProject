@@ -7,11 +7,13 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
-using StockMarket.DataAccess.Concrete;
 using Microsoft.OpenApi.Models;
 using StockMarket.Business.Concrete;
 using StockMarket.Business.Abstract;
 using Microsoft.AspNetCore.Identity;
+using StockMarket.DataAccess.Abstract;
+using StockMarket.DataAccess.Concrete;
+using StockMarket.DataAccess.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +25,7 @@ builder.Services.AddIdentity<AppUser, AppRole>()
     .AddDefaultTokenProviders()
     .AddUserManager<UserManager<AppUser>>(); // CustomUserManager yerine UserManager<AppUser> kullanýldý
 
-builder.Services.AddScoped<IBalanceManager, BalanceManager>();
+builder.Services.AddScoped<IBalanceDal, BalanceRepository>();
 
 builder.Services.AddSwaggerGen(c =>
 {
