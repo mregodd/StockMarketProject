@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using StockMarket.DataAccess.Repositories;
 using StockMarket.Entities.Concrete;
 
 namespace StockMarket.API.Controllers
@@ -11,11 +12,13 @@ namespace StockMarket.API.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly PortfolioService _portfolioService;
 
         public AuthController(UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+
         }
 
         [HttpPost("Register")]
@@ -33,8 +36,18 @@ namespace StockMarket.API.Controllers
 
                 if (result.Succeeded)
                 {
-                    // Kullanıcı başarıyla oluşturuldu, isterseniz burada diğer işlemleri gerçekleştirebilirsiniz.
-                    return Ok("Kullanıcı başarıyla oluşturuldu.");
+                    await _userManager.AddToRoleAsync(user, "UserRole"); // Varsayılan kullanıcı rolü
+                    
+                    var portfolio = new UserPortfolio
+                    {
+                        StockName = "Example Stock",
+                        Quantity = 100,
+                        Value = 1000
+                    };
+
+                    _portfolioService.AddPortfolio(portfolio);
+
+                    return RedirectToAction("Login", "Auth"); // AuthController içinde Login actionı
                 }
 
                 // Kullanıcı oluşturulamadı, hataları döndürün.
@@ -71,7 +84,6 @@ namespace StockMarket.API.Controllers
     public class RegisterModel
     {
         public string UserNumber { get; set; }
-        public decimal UserBalance { get; set; }
         public string Password { get; set; }
     }
 

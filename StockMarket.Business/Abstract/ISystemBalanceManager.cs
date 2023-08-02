@@ -1,5 +1,4 @@
-﻿using StockMarket.Entities.Concrete;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace StockMarket.Business.Abstract
 {
-    public interface IUserProcess:IGenericService<UserProcess>
+    public interface ISystemBalanceManager
     {
+        decimal GetSystemBalance();
+        void UpdateSystemBalance(decimal newBalance);
     }
+
 }

@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace StockMarket.DataAccess.Abstract
 {
-    public interface IUserDal : IGenericDal<User> //userden miras aldırdık
+    public interface IUserDal
     {
-
+        Task CreateUser(string username, string password);
     }
+
 }

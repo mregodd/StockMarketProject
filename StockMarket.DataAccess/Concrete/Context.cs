@@ -14,15 +14,22 @@ namespace StockMarket.DataAccess.Concrete
         public Context(DbContextOptions<Context> options) : base(options)
         {
         }
-        public DbSet<User> Users { get; set; }
-        public DbSet<UserProcess> UserProcesses { get; set; }
-    }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
 
-    public class User // kullanıcı bilgileri
-    {
-        public int UserID { get; set; }
-        public string UserNumber { get; set; }
-        public decimal UserBalance { get; set; }
+            // Admin rolü tanımı
+            modelBuilder.Entity<AppRole>().HasData(new AppRole
+            {
+                Id = 1,
+                Name = "Admin",
+                NormalizedName = "ADMIN"
+            });
+        }
+        public DbSet<User> Users { get; set; }
+        public DbSet<UserPortfolio> UserPortfolios { get; set; }    
+        public DbSet<UserBalance> UserBalances { get; set; }   
+        public DbSet<SystemBalance> SystemBalances { get; set; }    
     }
 
 }

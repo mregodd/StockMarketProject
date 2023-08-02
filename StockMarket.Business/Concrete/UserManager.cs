@@ -1,5 +1,6 @@
 ﻿using StockMarket.Business.Abstract;
 using StockMarket.DataAccess.Abstract;
+using StockMarket.DataAccess.Concrete;
 using StockMarket.Entities.Concrete;
 using System;
 using System.Collections.Generic;
@@ -11,36 +12,24 @@ namespace StockMarket.Business.Concrete
 {
     public class UserManager : IUser
     {
-        private readonly IUserDal _UserDal; //dependency injection uyguladık
+        private readonly Context _context;
 
-        public UserManager(IUserDal userDal)
+        public UserManager(Context context)
         {
-            _UserDal = userDal;
+            _context = context;
         }
 
-        public void TDelete(User t)
+        public async Task CreateUser(string username, string email, string password)
         {
-            _UserDal.Delete(t);
-        }
+            var user = new User
+            {
+                UserName = username,
+                UserBalance = 0 // Varsayılan olarak sıfır bakiye atıyoruz
+            };
 
-        public User TGetById(int id)
-        {
-            return _UserDal.GetById(id);
-        }
-
-        public List<User> TGetList()
-        {
-            return _UserDal.GetList();
-        }
-
-        public void TInsert(User t)
-        {
-            _UserDal.Insert(t);
-        }
-
-        public void TUpdate(User t)
-        {
-            _UserDal.Update(t); 
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
         }
     }
+
 }

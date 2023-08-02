@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 
 namespace StockMarket.Business.Abstract
 {
-    public interface IUser:IGenericService<User>
+    public interface IUser
     {
+        Task CreateUser(string username, string email, string password);
     }
+
 }

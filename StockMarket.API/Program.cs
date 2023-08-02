@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using StockMarket.DataAccess.Concrete;
 using Microsoft.OpenApi.Models;
 using StockMarket.Business.Concrete;
+using StockMarket.Business.Abstract;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,9 @@ builder.Services.AddIdentity<AppUser, AppRole>()
     .AddEntityFrameworkStores<Context>()
     .AddDefaultTokenProviders()
     .AddUserManager<CustomUserManager>();
+
+builder.Services.AddScoped<IBalanceManager, BalanceManager>();
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API Name", Version = "v1" });
@@ -46,6 +50,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 
         };
     });
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminPolicy", policy =>
+    {
+        policy.RequireRole("Admin");
+        policy.RequireClaim("CreateUser");
+        policy.RequireClaim("DeleteUser");
+        // Diðer yetkileri burada tanýmlayabiliriz.
+    });
+});
 
 builder.Services.AddControllers();
 
