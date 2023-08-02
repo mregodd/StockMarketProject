@@ -28,7 +28,7 @@ namespace StockMarket.API.Controllers
             {
                 var user = new User
                 {
-                    UserNumber = model.UserNumber,
+                    UserName = model.Username,
                     // Diğer kullanıcı bilgilerini buraya ekleyin, gerekirse kullanıcı oluşturulmadan önce doğrulama yapın.
                 };
 
@@ -63,7 +63,7 @@ namespace StockMarket.API.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.UserNumber, model.Password, isPersistent: false, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, isPersistent: false, lockoutOnFailure: false);
 
                 if (result.Succeeded)
                 {
@@ -83,14 +83,14 @@ namespace StockMarket.API.Controllers
     // Bu modeli RegisterModel olarak varsayalım, yeni kullanıcı oluşturmak için gerekli bilgileri içerir.
     public class RegisterModel
     {
-        public string UserNumber { get; set; }
         public string Password { get; set; }
+        public string Username { get; set; }
     }
 
     // Bu modeli LoginModel olarak varsayalım, kullanıcı girişi için gerekli bilgileri içerir.
     public class LoginModel
     {
-        public string UserNumber { get; set; }
+        public string Username{ get; set; }
         public string Password { get; set; }
 
     }

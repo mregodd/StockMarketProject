@@ -10,16 +10,18 @@ using System.Threading.Tasks;
 
 namespace StockMarket.Business.Concrete
 {
-    public class UserManager : IUser
+    public class UserManager : IUserManager
     {
-        private readonly Context _context;
+        private readonly IUserRepository _userRepository;
+        private readonly IBalanceDal _balanceDal;
 
-        public UserManager(Context context)
+        public UserManager(IUserRepository userRepository, IBalanceDal balanceDal)
         {
-            _context = context;
+            _userRepository = userRepository;
+            _balanceDal = balanceDal;
         }
 
-        public async Task CreateUser(string username, string email, string password)
+        public async Task CreateUser(string username, string password)
         {
             var user = new User
             {
@@ -27,8 +29,30 @@ namespace StockMarket.Business.Concrete
                 UserBalance = 0 // Varsayılan olarak sıfır bakiye atıyoruz
             };
 
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            _userRepository.CreateUser(user); // Burada kullanıcıyı veritabanına ekleyin
+
+            var userBalance = new UserBalance
+            {
+                UserID = int.Parse(user.Id),
+                Balance = 0 // Varsayılan olarak sıfır bakiye atıyoruz
+            };
+
+            _balanceDal.AddUserBalance(userBalance);
+            await _userRepository.SaveChangesAsync();
+        }
+
+        public Task DeleteUser(int userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<User> GetUserById(int userId)
+        {
+            throw new NotImplementedException();
+        }
+        public Task UpdateUser(User user)
+        {
+            throw new NotImplementedException();
         }
     }
 

@@ -12,7 +12,7 @@ namespace StockMarket.Entities.Concrete
         public string StockName { get; set; }
         public int Quantity { get; set; }
         public decimal Value { get; set; }
-        public string UserId { get; set; }
+        public string UserID { get; set; }
 
 
     }

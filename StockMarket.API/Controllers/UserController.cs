@@ -12,12 +12,12 @@ namespace StockMarket.API.Controllers
 [Route("api/[controller]")]
 public class UserController : ControllerBase
 {
-    private readonly IBalanceManager _balanceManager;
+    private readonly IBalanceManager _balanceService;
     private readonly UserManager<User> _userManager;
 
     public UserController(IBalanceManager balanceService, UserManager<User> userManager)
     {
-            _balanceManager = balanceManager;
+        _balanceService = balanceService;
         _userManager = userManager;
     }
 

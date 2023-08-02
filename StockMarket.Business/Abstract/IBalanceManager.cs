@@ -13,6 +13,7 @@ namespace StockMarket.Business.Abstract
         SystemBalance GetSystemBalance();
         void AddUserBalance(int userId, decimal amount);
         void SubtractUserBalance(int userId, decimal amount);
+        void UpdateUserBalance(UserBalance userBalance);
     }
 
 }

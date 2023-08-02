@@ -11,13 +11,18 @@ using System.Threading.Tasks;
 
 namespace StockMarket.DataAccess.Repositories
 {
-    public class UserManager : IUserDal
+    public class UserRepository : IUserRepository
     {
         private readonly Context _context;
 
-        public UserManager(Context context)
+        public UserRepository(Context context)
         {
             _context = context;
+        }
+
+        public async Task<User> GetUserById(int userID)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.UserID == userID);
         }
 
         public async Task CreateUser(string username, string password)
@@ -30,6 +35,22 @@ namespace StockMarket.DataAccess.Repositories
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateUser(User user)
+        {
+            _context.Entry(user).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteUser(int userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user != null)
+            {
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 
@@ -52,11 +73,11 @@ namespace StockMarket.DataAccess.Repositories
         // Diğer portföy işlemleri için metotlar buraya eklenebilir
     }
 
-    public class BalanceService : IBalanceDal
+    public class BalanceManager : IBalanceDal
     {
         private readonly Context _context;
 
-        public BalanceService(Context context)
+        public BalanceManager(Context context)
         {
             _context = context;
         }
@@ -75,15 +96,10 @@ namespace StockMarket.DataAccess.Repositories
             return systemBalance;
         }
 
-        public void AddUserBalance(int userId, decimal amount)
+        public void AddUserBalance(UserBalance userBalance)
         {
-            // Kullanıcı bakiyesini veritabanında güncelleme işlemi
-            var userBalance = _context.UserBalances.FirstOrDefault(b => b.UserID == userId);
-            if (userBalance != null)
-            {
-                userBalance.Balance += amount;
-                _context.SaveChanges();
-            }
+            _context.UserBalances.Add(userBalance);
+            _context.SaveChanges();
         }
 
         public void SubtractUserBalance(int userId, decimal amount)
@@ -96,6 +112,6 @@ namespace StockMarket.DataAccess.Repositories
                 _context.SaveChanges();
             }
         }
-
     }
+
 }

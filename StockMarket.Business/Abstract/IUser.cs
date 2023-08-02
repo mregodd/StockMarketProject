@@ -9,7 +9,7 @@ namespace StockMarket.Business.Abstract
 {
     public interface IUser
     {
-        Task CreateUser(string username, string email, string password);
+        Task CreateUser(string usernumber, string password);
     }
 
 }

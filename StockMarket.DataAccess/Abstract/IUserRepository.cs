@@ -7,9 +7,13 @@ using System.Threading.Tasks;
 
 namespace StockMarket.DataAccess.Abstract
 {
-    public interface IUserDal
+    public interface IUserRepository
     {
-        Task CreateUser(string username, string password);
+        Task CreateUser(string usernumber, string password);
+        Task<User> GetUserById(int userId);
+        Task UpdateUser(User user);
+
+        Task DeleteUser(int userId);
     }
 
 }

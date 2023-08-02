@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using StockMarket.Entities.Concrete;
@@ -7,16 +6,14 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNet.Identity;
 using Microsoft.EntityFrameworkCore;
 using StockMarket.DataAccess.Concrete;
 using Microsoft.OpenApi.Models;
 using StockMarket.Business.Concrete;
 using StockMarket.Business.Abstract;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 builder.Services.AddDbContext<Context>(options =>
     options.UseSqlServer("Server=DERBEDEK;Database=StockMarketDB;User Id=DBTest;Password=112233;TrustServerCertificate=True;"));
@@ -24,7 +21,7 @@ builder.Services.AddDbContext<Context>(options =>
 builder.Services.AddIdentity<AppUser, AppRole>()
     .AddEntityFrameworkStores<Context>()
     .AddDefaultTokenProviders()
-    .AddUserManager<CustomUserManager>();
+    .AddUserManager<UserManager<AppUser>>(); // CustomUserManager yerine UserManager<AppUser> kullanýldý
 
 builder.Services.AddScoped<IBalanceManager, BalanceManager>();
 
@@ -36,8 +33,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer
     (options =>
     {
-        options.TokenValidationParameters = new
-        Microsoft.IdentityModel.Tokens.TokenValidationParameters
+        options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateAudience = true,
             ValidateIssuer = true,
@@ -45,11 +41,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
             ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["Token:Issuer"],
             ValidAudience = builder.Configuration["Token:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes
-            (builder.Configuration["Token:SecurityKey"])),
-
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"])),
         };
     });
+
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminPolicy", policy =>
@@ -62,9 +57,6 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Services.AddControllers();
-
-
-
 
 // Configure the HTTP request pipeline.
 var app = builder.Build();
