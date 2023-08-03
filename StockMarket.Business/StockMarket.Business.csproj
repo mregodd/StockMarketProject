@@ -24,14 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\StockMarket.DataAccess\StockMarket.DataAccess.csproj" />
-    <ProjectReference Include="..\StockMarket.DataTransferObject\StockMarket.DataTransferObject.csproj" />
     <ProjectReference Include="..\StockMarket.Entities\StockMarket.Entities.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ValidationRules\AppRoleValidationRules\" />
-    <Folder Include="ValidationRules\UserProcessValidationRules\" />
-    <Folder Include="ValidationRules\UserValidationRules\" />
   </ItemGroup>
 
 </Project>

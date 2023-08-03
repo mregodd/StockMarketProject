@@ -9,7 +9,7 @@ using StockMarket.Entities.Concrete;
 namespace StockMarket.API.Controllers
 {
     [ApiController]
-[Route("api/[controller]")]
+    [Route("api/[controller]")]
 public class UserController : ControllerBase
 {
     private readonly IBalanceManager _balanceService;
