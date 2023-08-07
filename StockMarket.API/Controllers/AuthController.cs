@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using StockMarket.API.Security;
 using StockMarket.DataAccess.Repositories;
 using StockMarket.Entities.Concrete;
 
@@ -44,6 +45,7 @@ namespace StockMarket.API.Controllers
                         Quantity = 100,
                         Value = 1000
                     };
+                    
 
                     _portfolioManager.AddPortfolio(portfolio);
 
@@ -83,8 +85,9 @@ namespace StockMarket.API.Controllers
     // Bu modeli RegisterModel olarak varsayalım, yeni kullanıcı oluşturmak için gerekli bilgileri içerir.
     public class RegisterModel
     {
-        public string Password { get; set; }
         public string Username { get; set; }
+        public string Password { get; set; }
+        
     }
 
     // Bu modeli LoginModel olarak varsayalım, kullanıcı girişi için gerekli bilgileri içerir.

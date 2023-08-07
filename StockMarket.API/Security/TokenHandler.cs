@@ -1,4 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using StockMarket.Entities.Concrete;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Cryptography;
 using System.Text;
@@ -7,7 +8,7 @@ namespace StockMarket.API.Security
 {
     public static class TokenHandler
     {
-        public static Token CreateToken(IConfiguration configuration)
+        public static Token CreateToken(IConfiguration configuration, User user)
         {
             Token token = new Token();
 
@@ -19,11 +20,11 @@ namespace StockMarket.API.Security
 
             JwtSecurityToken jwtSecurityToken = new(
                 issuer: configuration["Token:Issuer"],
-                audience: configuration["Token:audience"],
+                audience: configuration["Token:Audience"],
                 expires: token.Expiration,
                 notBefore: DateTime.Now,
                 signingCredentials: credentials
-                );
+            );
 
             JwtSecurityTokenHandler tokenHandler = new();
             token.AccessToken = tokenHandler.WriteToken(jwtSecurityToken);
@@ -32,9 +33,10 @@ namespace StockMarket.API.Security
             using RandomNumberGenerator random = RandomNumberGenerator.Create();
             random.GetBytes(numbers);
             token.RefreshToken = Convert.ToBase64String(numbers);
-            
-            
+
             return token;
-        }  
+        }
+
+
     }
 }

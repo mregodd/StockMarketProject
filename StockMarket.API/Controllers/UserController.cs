@@ -12,28 +12,28 @@ namespace StockMarket.API.Controllers
     [Route("api/[controller]")]
 public class UserController : ControllerBase
 {
-    private readonly IBalanceManager _balanceService;
+    private readonly IBalanceManager _balanceManager;
     private readonly UserManager<User> _userManager;
 
-    public UserController(IBalanceManager balanceService, UserManager<User> userManager)
+    public UserController(IBalanceManager balanceManager, UserManager<User> userManager)
     {
-        _balanceService = balanceService;
+        _balanceManager = balanceManager;
         _userManager = userManager;
     }
 
     [HttpGet("{userId}/balance")]
     public IActionResult GetUserBalance(int userId)
     {
-        // Kullanıcının bakiyesini almak için BalanceService'i kullanın
-        var balance = _balanceService.GetUserBalance(userId);
+            // Kullanıcının bakiyesini almak için BalanceManager'i kullanın
+        var balance = _balanceManager.GetUserBalance(userId);
         return Ok(balance);
     }
     [Authorize("AdminOnly")]
     [HttpPost("{userId}/addbalance")]
     public IActionResult AddUserBalance(int userId, [FromBody] decimal amount)
     {
-        // Kullanıcının bakiyesine amount kadar para eklemek için BalanceService'i kullanın
-        _balanceService.AddUserBalance(userId, amount);
+            // Kullanıcının bakiyesine amount kadar para eklemek için BalanceManager'i kullanın
+        _balanceManager.AddUserBalance(userId, amount);
         return Ok("Bakiye başarıyla eklendi.");
     }
 
@@ -41,8 +41,8 @@ public class UserController : ControllerBase
     [HttpPost("{userId}/subtractbalance")]
     public IActionResult SubtractUserBalance(int userId, [FromBody] decimal amount)
     {
-        // Kullanıcının bakiyesinden amount kadar para düşürmek için BalanceService'i kullanın
-        _balanceService.SubtractUserBalance(userId, amount);
+            // Kullanıcının bakiyesinden amount kadar para düşürmek için BalanceManager'i kullanın
+        _balanceManager.SubtractUserBalance(userId, amount);
         return Ok("Bakiyeden para düşürüldü.");
     }
 }

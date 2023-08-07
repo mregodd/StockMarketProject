@@ -26,6 +26,8 @@ builder.Services.AddIdentity<AppUser, AppRole>()
     .AddUserManager<UserManager<AppUser>>(); // CustomUserManager yerine UserManager<AppUser> kullanýldý
 
 builder.Services.AddScoped<IBalanceDal, BalanceRepository>();
+builder.Services.AddScoped<PortfolioManager>(); // Örnek bir kullaným, size uygun þekilde ayarlayýn.
+
 
 builder.Services.AddSwaggerGen(c =>
 {

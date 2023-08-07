@@ -1,6 +1,9 @@
-﻿
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using StockMarket.API.Security;
+using StockMarket.Entities.Concrete;
+using System.Threading.Tasks;
 
 namespace StockMarket.API.Controllers
 {
@@ -9,17 +12,33 @@ namespace StockMarket.API.Controllers
     public class TokenController : ControllerBase
     {
         private readonly IConfiguration _configuration;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
 
-        public TokenController(IConfiguration configuration)
+        public TokenController(IConfiguration configuration, UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _configuration = configuration;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
-        [HttpGet]
-        public IActionResult Get()
+        [HttpPost("Create")]
+        public async Task<IActionResult> Create([FromBody] LoginModel model)
         {
-            Token token = TokenHandler.CreateToken(_configuration);
-            return Ok(token);
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByNameAsync(model.Username);
+
+                if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
+                {
+                    // Giriş başarılı, token oluştur ve dön
+                    var token = TokenHandler.CreateToken(_configuration, user);
+                    return Ok(new { Token = token.AccessToken });
+                }
+            }
+
+            // Giriş başarısız, hata döndür
+            return BadRequest("Giriş başarısız.");
         }
     }
 }
