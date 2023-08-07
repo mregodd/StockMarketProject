@@ -13,6 +13,7 @@ using StockMarket.Business.Abstract;
 using Microsoft.AspNetCore.Identity;
 using StockMarket.DataAccess.Abstract;
 using StockMarket.DataAccess.Concrete;
+
 using StockMarket.DataAccess.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,8 +24,8 @@ builder.Services.AddDbContext<Context>(options =>
 builder.Services.AddIdentity<AppUser, AppRole>()
     .AddEntityFrameworkStores<Context>()
     .AddDefaultTokenProviders()
-    .AddUserManager<UserManager<AppUser>>(); // CustomUserManager yerine UserManager<AppUser> kullanýldý
-
+    .AddUserManager<UserManager<AppUser>>() // CustomUserManager yerine UserManager<AppUser> kullanýldý
+    .AddRoles<AppRole>();
 builder.Services.AddScoped<IBalanceDal, BalanceRepository>();
 builder.Services.AddScoped<PortfolioManager>(); // Örnek bir kullaným, size uygun þekilde ayarlayýn.
 
@@ -70,6 +71,17 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<AppRole>>();
+
+    var roles = new[] { "USERROLE", "Admin", /* diðer roller */ };
+    foreach (var role in roles)
+    {
+        if (!roleManager.RoleExistsAsync(role).Result)
+            roleManager.CreateAsync(new AppRole { Name = role }).Wait();
+    }
+}
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {

@@ -10,8 +10,8 @@ namespace StockMarket.DataAccess.Abstract
     public interface IUserRepository
     {
         Task CreateUser(string usernumber, string password);
-        Task<User> GetUserById(int userId);
-        Task UpdateUser(User user);
+        Task<AppUser> GetUserById(int userId);
+        Task UpdateUser(AppUser user);
 
         Task DeleteUser(int userId);
     }

@@ -158,7 +158,7 @@ namespace StockMarket.DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "ea0d9651-08a8-49a1-ae5e-aff484ab73e1",
+                            ConcurrencyStamp = "9b224eef-eda0-4466-9973-650ae15cc242",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -175,8 +175,14 @@ namespace StockMarket.DataAccess.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("District")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -193,7 +199,6 @@ namespace StockMarket.DataAccess.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
@@ -217,7 +222,6 @@ namespace StockMarket.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Surname")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -259,82 +263,18 @@ namespace StockMarket.DataAccess.Migrations
                     b.ToTable("SystemBalances");
                 });
 
-            modelBuilder.Entity("StockMarket.Entities.Concrete.User", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("AppUserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<decimal>("UserBalance")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
-
-                    b.ToTable("Users");
-                });
-
             modelBuilder.Entity("StockMarket.Entities.Concrete.UserBalance", b =>
                 {
-                    b.Property<int>("UserID")
+                    b.Property<int>("AppUserID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserID"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AppUserID"), 1L, 1);
 
                     b.Property<decimal>("Balance")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("UserID");
+                    b.HasKey("AppUserID");
 
                     b.ToTable("UserBalances");
                 });
@@ -347,6 +287,9 @@ namespace StockMarket.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("AppUserId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -354,14 +297,12 @@ namespace StockMarket.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<decimal>("Value")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
 
                     b.ToTable("UserPortfolios");
                 });
@@ -417,16 +358,15 @@ namespace StockMarket.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("StockMarket.Entities.Concrete.User", b =>
+            modelBuilder.Entity("StockMarket.Entities.Concrete.UserPortfolio", b =>
                 {
-                    b.HasOne("StockMarket.Entities.Concrete.AppUser", null)
-                        .WithMany("Users")
-                        .HasForeignKey("AppUserId");
-                });
+                    b.HasOne("StockMarket.Entities.Concrete.AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-            modelBuilder.Entity("StockMarket.Entities.Concrete.AppUser", b =>
-                {
-                    b.Navigation("Users");
+                    b.Navigation("AppUser");
                 });
 #pragma warning restore 612, 618
         }

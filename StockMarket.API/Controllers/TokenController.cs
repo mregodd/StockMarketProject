@@ -12,10 +12,10 @@ namespace StockMarket.API.Controllers
     public class TokenController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
 
-        public TokenController(IConfiguration configuration, UserManager<User> userManager, SignInManager<User> signInManager)
+        public TokenController(IConfiguration configuration, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
             _configuration = configuration;
             _userManager = userManager;

@@ -13,9 +13,9 @@ namespace StockMarket.API.Controllers
 public class UserController : ControllerBase
 {
     private readonly IBalanceManager _balanceManager;
-    private readonly UserManager<User> _userManager;
+    private readonly UserManager<AppUser> _userManager;
 
-    public UserController(IBalanceManager balanceManager, UserManager<User> userManager)
+    public UserController(IBalanceManager balanceManager, UserManager<AppUser> userManager)
     {
         _balanceManager = balanceManager;
         _userManager = userManager;

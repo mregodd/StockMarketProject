@@ -1,6 +1,7 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using StockMarket.Entities.Concrete;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -8,7 +9,7 @@ namespace StockMarket.API.Security
 {
     public static class TokenHandler
     {
-        public static Token CreateToken(IConfiguration configuration, User user)
+        public static Token CreateToken(IConfiguration configuration, AppUser user)
         {
             Token token = new Token();
 
@@ -21,6 +22,12 @@ namespace StockMarket.API.Security
             JwtSecurityToken jwtSecurityToken = new(
                 issuer: configuration["Token:Issuer"],
                 audience: configuration["Token:Audience"],
+                claims: new List<Claim>
+                {
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    // İsteğe bağlı diğer iddiaları ekleyin
+                },
                 expires: token.Expiration,
                 notBefore: DateTime.Now,
                 signingCredentials: credentials

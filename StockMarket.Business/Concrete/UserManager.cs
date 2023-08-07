@@ -1,6 +1,8 @@
-﻿using StockMarket.Business.Abstract;
+﻿using Microsoft.AspNetCore.Identity;
+using StockMarket.Business.Abstract;
 using StockMarket.DataAccess.Abstract;
 using StockMarket.DataAccess.Concrete;
+using StockMarket.DataAccess.Repositories;
 using StockMarket.Entities.Concrete;
 using System;
 using System.Collections.Generic;
@@ -12,33 +14,38 @@ namespace StockMarket.Business.Concrete
 {
     public class UserManager : IUserManager
     {
+        private readonly UserManager<AppUser> _userManager;
         private readonly IUserRepository _userRepository;
         private readonly IBalanceDal _balanceDal;
 
-        public UserManager(IUserRepository userRepository, IBalanceDal balanceDal)
+        public UserManager(UserManager<AppUser> userManager, IUserRepository userRepository, IBalanceDal balanceDal)
         {
+            _userManager = userManager;
             _userRepository = userRepository;
             _balanceDal = balanceDal;
         }
 
         public async Task CreateUser(string username, string password)
         {
-            var user = new User
+            var user = new AppUser // AppUser kullanıldı
             {
                 UserName = username,
-                UserBalance = 0 // Varsayılan olarak sıfır bakiye atıyoruz
+                UserBalance = 0
             };
 
-            _userRepository.CreateUser(user); // Burada kullanıcıyı veritabanına ekleyin
+            var result = await _userManager.CreateAsync(user, password); // Identity UserManager kullanıldı
 
-            var userBalance = new UserBalance
+            if (result.Succeeded)
             {
-                UserID = int.Parse(user.Id),
-                Balance = 0 // Varsayılan olarak sıfır bakiye atıyoruz
-            };
+                var userBalance = new UserBalance
+                {
+                    AppUserID = user.Id, // AppUserId olarak user.Id kullanıldı
+                    Balance = 0
+                };
 
-            _balanceDal.AddUserBalance(userBalance);
-            await _userRepository.SaveChangesAsync();
+                _balanceDal.AddUserBalance(userBalance);
+                await _userRepository.SaveChangesAsync();
+            }
         }
 
         public Task DeleteUser(int userId)
@@ -46,11 +53,11 @@ namespace StockMarket.Business.Concrete
             throw new NotImplementedException();
         }
 
-        public Task<User> GetUserById(int userId)
+        public Task<AppUser> GetUserById(int userId)
         {
             throw new NotImplementedException();
         }
-        public Task UpdateUser(User user)
+        public Task UpdateUser(AppUser user)
         {
             throw new NotImplementedException();
         }

@@ -54,7 +54,7 @@ namespace StockMarket.Business.Concrete
         {
 
             // Önce kullanıcının mevcut bakiyesini alın
-            UserBalance existingBalance = _balanceDal.GetUserBalance(userBalance.UserID);
+            UserBalance existingBalance = _balanceDal.GetUserBalance(userBalance.AppUserID);
 
             // Güncellenmiş bakiyeyi hesaplayın
             decimal updatedBalance = existingBalance.Balance + userBalance.Balance;

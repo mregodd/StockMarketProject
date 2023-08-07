@@ -20,14 +20,14 @@ namespace StockMarket.DataAccess.Repositories
             _context = context;
         }
 
-        public async Task<User> GetUserById(int userID)
+        public async Task<AppUser> GetUserById(int userID)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.UserID == userID);
+            return await _context.Users.FirstOrDefaultAsync(u => u.Id == userID);
         }
 
         public async Task CreateUser(string username, string password)
         {
-            var user = new User
+            var user = new AppUser
             {
                 UserName = username,
                 UserBalance = 0 // Varsayılan olarak sıfır bakiye atıyoruz
@@ -37,7 +37,7 @@ namespace StockMarket.DataAccess.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateUser(User user)
+        public async Task UpdateUser(AppUser user)
         {
             _context.Entry(user).State = EntityState.Modified;
             await _context.SaveChangesAsync();

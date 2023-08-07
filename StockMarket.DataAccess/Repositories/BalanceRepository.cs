@@ -21,7 +21,7 @@ namespace StockMarket.DataAccess.Repositories
         public UserBalance GetUserBalance(int userId)
         {
             // Kullanıcı bakiye bilgisini veritabanından çekme işlemi
-            var userBalance = _context.UserBalances.FirstOrDefault(b => b.UserID == userId);
+            var userBalance = _context.UserBalances.FirstOrDefault(b => b.AppUserID == userId);
             return userBalance;
         }
 
@@ -41,7 +41,7 @@ namespace StockMarket.DataAccess.Repositories
         public void UpdateUserBalance(UserBalance userBalance)
         {
             // Kullanıcı bakiyesini veritabanında güncelleme işlemi
-            var existingBalance = _context.UserBalances.FirstOrDefault(b => b.UserID == userBalance.UserID);
+            var existingBalance = _context.UserBalances.FirstOrDefault(b => b.AppUserID == userBalance.AppUserID);
             if (existingBalance != null)
             {
                 existingBalance.Balance = userBalance.Balance;
@@ -52,7 +52,7 @@ namespace StockMarket.DataAccess.Repositories
         public void SubtractUserBalance(int userId, decimal amount)
         {
             // Kullanıcı bakiyesini veritabanında güncelleme işlemi
-            var userBalance = _context.UserBalances.FirstOrDefault(b => b.UserID == userId);
+            var userBalance = _context.UserBalances.FirstOrDefault(b => b.AppUserID == userId);
             if (userBalance != null)
             {
                 userBalance.Balance -= amount;

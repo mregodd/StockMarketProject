@@ -12,12 +12,11 @@ namespace StockMarket.Entities.Concrete
 {
     public class AppUser : IdentityUser<int> //aspnetuser ile bağlantı kurup düzenlemek için oluşturduk
     {
-        public string Name { get; set; }
-        public string Surname { get; set; }
-        public List<User> Users { get; set; }
+        public string? Name { get; set; }
+        public string? Surname { get; set; }
+        public string? City { get; set; }
+        public string? District { get; set; }
+
         public decimal UserBalance { get; set; }
-
-
-
     }
 }

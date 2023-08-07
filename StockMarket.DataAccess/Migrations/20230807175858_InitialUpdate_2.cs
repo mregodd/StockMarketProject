@@ -4,7 +4,7 @@
 
 namespace StockMarket.DataAccess.Migrations
 {
-    public partial class systembalanceuserbalance : Migration
+    public partial class InitialUpdate_2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,7 +13,7 @@ namespace StockMarket.DataAccess.Migrations
                 keyColumn: "Id",
                 keyValue: 1,
                 column: "ConcurrencyStamp",
-                value: "ea0d9651-08a8-49a1-ae5e-aff484ab73e1");
+                value: "9b224eef-eda0-4466-9973-650ae15cc242");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -23,7 +23,7 @@ namespace StockMarket.DataAccess.Migrations
                 keyColumn: "Id",
                 keyValue: 1,
                 column: "ConcurrencyStamp",
-                value: "0c709156-b803-4495-9d6f-b0b5f53ff1db");
+                value: "d6a3520c-f1e8-464d-86f5-5b5a6cff91c4");
         }
     }
 }

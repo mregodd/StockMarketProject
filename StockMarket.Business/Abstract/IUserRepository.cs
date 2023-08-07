@@ -6,13 +6,13 @@ namespace StockMarket.Business.Concrete
     {
        
         
-        Task<User> GetUserById(int userId);
-        Task CreateUser(User user);
+        Task<AppUser> GetUserById(int userId);
+        Task CreateUser(AppUser user);
 
-        Task UpdateUser(User user);
+        Task UpdateUser(AppUser user);
 
         Task DeleteUser(int userId);
         Task SaveChangesAsync();
-        void AddUser(User user);
+        void AddUser(AppUser user);
     }
 }
