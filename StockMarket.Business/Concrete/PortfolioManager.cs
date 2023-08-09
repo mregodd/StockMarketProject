@@ -66,5 +66,27 @@ namespace StockMarket.Business.Concrete
 
             _portfolioRepository.DeletePortfolio(portfolioId);
         }
+
+        public UserPortfolio GetPortfolioByUserIdAndStock(int userId, string stockName)
+        {
+            var portfolio = _portfolioRepository.GetPortfolioByUserIdAndStock(userId, stockName);
+            if (portfolio == null)
+            {
+                throw new InvalidOperationException("Kullanıcının belirtilen hisse senedi portföyü bulunmamaktadır.");
+            }
+
+            return portfolio;
+        }
+
+        public UserPortfolio GetPortfolioById(int id)
+        {
+            var portfolio = _portfolioRepository.GetPortfolioById(id);
+            if (portfolio == null)
+            {
+                throw new InvalidOperationException("Portföy bulunamadı.");
+            }
+
+            return portfolio;
+        }
     }
 }

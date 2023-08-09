@@ -26,11 +26,13 @@ builder.Services.AddIdentity<AppUser, AppRole>(options =>
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequiredLength = 6;
     options.User.RequireUniqueEmail = false;
+    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
 })
     .AddEntityFrameworkStores<Context>()
     .AddDefaultTokenProviders()
     .AddUserManager<UserManager<AppUser>>() // CustomUserManager yerine UserManager<AppUser> kullanýldý
     .AddRoles<AppRole>();
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserManager>();
 builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
@@ -77,22 +79,33 @@ builder.Services.AddControllers();
 // Configure the HTTP request pipeline.
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())//admin oluþturduk.
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+if (!await roleManager.RoleExistsAsync("Admin"))
+{
+    await roleManager.CreateAsync(new IdentityRole("Admin"));
+}
+
+var adminUser = new IdentityUser
+{
+    UserName = "admin@example.com",
+    Email = "admin@example.com"
+};
+await userManager.CreateAsync(adminUser, "Admin123!");
+await userManager.AddToRoleAsync(adminUser, "Admin");
+
+}
+
+
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
 
-using (var scope = app.Services.CreateScope())
-{
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<AppRole>>();
 
-    var roles = new[] { "USERROLE", "Admin", "User"};
-    foreach (var role in roles)
-    {
-        if (!roleManager.RoleExistsAsync(role).Result)
-            roleManager.CreateAsync(new AppRole { Name = role }).Wait();
-    }
-}
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
@@ -104,3 +117,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+
+// Admin kullanýcýsýný oluþturma iþlemini burada yapabilirsiniz

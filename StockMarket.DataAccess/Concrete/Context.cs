@@ -18,13 +18,15 @@ namespace StockMarket.DataAccess.Concrete
         {
             base.OnModelCreating(modelBuilder);
 
-            // Admin rolü tanımı
-            modelBuilder.Entity<AppRole>().HasData(new AppRole
-            {
-                Id = 1,
-                Name = "Admin",
-                NormalizedName = "ADMIN"
-            });
+            modelBuilder.Entity<UserBalance>()
+                .HasOne(b => b.AppUser)
+                .WithMany(u => u.UserBalances)
+                .HasForeignKey(b => b.AppUserId);
+
+            modelBuilder.Entity<UserPortfolio>()
+                .HasOne(p => p.AppUser)
+                .WithMany(u => u.UserPortfolios)
+                .HasForeignKey(p => p.AppUserId);
         }
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<UserPortfolio> UserPortfolios { get; set; }    

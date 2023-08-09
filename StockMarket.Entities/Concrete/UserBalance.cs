@@ -12,10 +12,11 @@ namespace StockMarket.Entities.Concrete
     public class UserBalance
     {
         [Key]
-        public int AppUserID { get; set; }
-        
+        public int AppUserId { get; set; }
+
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Balance { get; set; }
-        
+        public AppUser AppUser { get; set; } // AppUser ile ilişkili navigasyon özelliği
+
     }
 }

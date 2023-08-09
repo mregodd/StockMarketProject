@@ -43,8 +43,8 @@ namespace StockMarket.API.Controllers
                 var user = new AppUser
                 {
                     UserName = model.Username,
-                    Name = "User",
-                    Surname = "USER",
+                    Name = "NameUser",
+                    Surname = "SurnameUser",
                     City = "UserCity",
                     District = "UserDistrict",
 
@@ -55,9 +55,9 @@ namespace StockMarket.API.Controllers
                 if (result.Succeeded)
                 {
                     // Kullanıcı rolü eklemesi yapıldı
-                    if (!await _userManager.IsInRoleAsync(user, "USERROLE"))
+                    if (!await _userManager.IsInRoleAsync(user, "User"))
                     {
-                        await _userManager.AddToRoleAsync(user, "USERROLE");
+                        await _userManager.AddToRoleAsync(user, "User");
                     }
 
                     var portfolio = new UserPortfolio

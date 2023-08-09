@@ -39,7 +39,7 @@ namespace StockMarket.Business.Concrete
             {
                 var userBalance = new UserBalance
                 {
-                    AppUserID = user.Id,
+                    AppUserId = user.Id,
                     Balance = 0
                 };
 
