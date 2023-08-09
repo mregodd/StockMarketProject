@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 
 namespace StockMarket.Business.Abstract
 {
-    public interface IPortfolioManager
+    public interface IPortfolioService
     {
         void AddPortfolio(UserPortfolio portfolio);
         UserPortfolio GetPortfolioByUserId(int userId);
         void UpdatePortfolio(UserPortfolio portfolio);
         void DeletePortfolio(int portfolioId);
+        UserPortfolio GetPortfolioByUserIdAndStock(int userId, string stockName);
+        UserPortfolio GetPortfolioById(int id);
     }
 }

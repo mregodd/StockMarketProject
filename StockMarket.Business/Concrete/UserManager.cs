@@ -12,38 +12,38 @@ using System.Threading.Tasks;
 
 namespace StockMarket.Business.Concrete
 {
-    public class UserManager : IUserManager
+    public class UserManager : IUserService
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IUserRepository _userRepository;
-        private readonly IBalanceRepository _balanceDal;
+        private readonly IBalanceRepository _balanceRepository;
 
-        public UserManager(UserManager<AppUser> userManager, IUserRepository userRepository, IBalanceRepository balanceDal)
+        public UserManager(UserManager<AppUser> userManager, IUserRepository userRepository, IBalanceRepository balanceRepository)
         {
             _userManager = userManager;
             _userRepository = userRepository;
-            _balanceDal = balanceDal;
+            _balanceRepository = balanceRepository;
         }
 
         public async Task CreateUser(string username, string password)
         {
-            var user = new AppUser // AppUser kullanıldı
+            var user = new AppUser
             {
                 UserName = username,
                 UserBalance = 0
             };
 
-            var result = await _userManager.CreateAsync(user, password); // Identity UserManager kullanıldı
+            var result = await _userManager.CreateAsync(user, password);
 
             if (result.Succeeded)
             {
                 var userBalance = new UserBalance
                 {
-                    AppUserID = user.Id, // AppUserId olarak user.Id kullanıldı
+                    AppUserID = user.Id,
                     Balance = 0
                 };
 
-                _balanceDal.AddUserBalance(userBalance);
+                _balanceRepository.AddUserBalance(userBalance);
                 await _userRepository.SaveChangesAsync();
             }
         }
@@ -65,8 +65,15 @@ namespace StockMarket.Business.Concrete
 
         public async Task UpdateUser(AppUser user)
         {
-            await _userManager.UpdateAsync(user);
+            var existingUser = await _userManager.FindByIdAsync(user.Id.ToString());
+
+            if (existingUser != null)
+            {
+                existingUser.UserName = user.UserName;
+                // Diğer özelliklerini de güncelleyebilirsiniz
+
+                await _userManager.UpdateAsync(existingUser);
+            }
         }
     }
-
 }

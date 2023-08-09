@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace StockMarket.Business.Abstract
 {
-    public interface ISystemBalanceManager
+    public interface ISystemBalanceService
     {
         decimal GetSystemBalance();
         void UpdateSystemBalance(decimal newBalance);

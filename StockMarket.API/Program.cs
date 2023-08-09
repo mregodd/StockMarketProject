@@ -1,10 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using StockMarket.Entities.Concrete;
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -36,11 +32,14 @@ builder.Services.AddIdentity<AppUser, AppRole>(options =>
     .AddUserManager<UserManager<AppUser>>() // CustomUserManager yerine UserManager<AppUser> kullanýldý
     .AddRoles<AppRole>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserManager>();
 builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
+builder.Services.AddScoped<IBalanceService, BalanceManager>();
 builder.Services.AddScoped<IPortfolioRepository, PortfolioRepository>();
-builder.Services.AddScoped<IUserManager, UserManager>();
-builder.Services.AddScoped<IBalanceManager, BalanceManager>();
-builder.Services.AddScoped<IPortfolioManager, PortfolioManager>();
+builder.Services.AddScoped<IPortfolioService, PortfolioManager>();
+builder.Services.AddScoped<ISystemBalanceService, SystemBalanceManager>();     
+builder.Services.AddScoped<ISystemBalanceRepository, SystemBalanceRepository>();   
+
 
 builder.Services.AddSwaggerGen(c =>
 {

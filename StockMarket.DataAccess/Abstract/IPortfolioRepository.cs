@@ -13,5 +13,7 @@ namespace StockMarket.DataAccess.Abstract
         UserPortfolio GetPortfolioByUserId(int userId);
         void UpdatePortfolio(UserPortfolio portfolio);
         void DeletePortfolio(int portfolioId);
+        UserPortfolio GetPortfolioByUserIdAndStock(int userId, string stockName);
+        UserPortfolio GetPortfolioById(int id);
     }
 }

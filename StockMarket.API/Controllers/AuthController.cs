@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using StockMarket.API.Security;
 using StockMarket.Business.Abstract;
 using StockMarket.Business.Concrete;
+using StockMarket.DataAccess.Abstract;
 using StockMarket.DataAccess.Repositories;
 using StockMarket.Entities.Concrete;
 
@@ -17,20 +18,20 @@ namespace StockMarket.API.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        private readonly PortfolioManager _portfolioManager;
-        private readonly BalanceManager _balanceManager;
-        private readonly SystemBalanceManager _systemBalanceManager;
+        private readonly IPortfolioService _portfolioService;
+        private readonly IBalanceService _balanceService;
+        private readonly ISystemBalanceService _systemBalanceService;
         private readonly IConfiguration _configuration;
 
 
-        public AuthController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration configuration,PortfolioManager portfolioManager,BalanceManager balanceManager,SystemBalanceManager systemBalanceManager)
+        public AuthController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration configuration, IPortfolioService portfolioService, IBalanceService balanceService,ISystemBalanceService systemBalanceService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
-            _portfolioManager = portfolioManager;
-            _balanceManager = balanceManager;
-            _systemBalanceManager = systemBalanceManager;
+            _portfolioService = portfolioService;
+            _balanceService = balanceService;
+            _systemBalanceService = systemBalanceService;
 
         }
 
@@ -67,13 +68,13 @@ namespace StockMarket.API.Controllers
                         AppUser = user // Kullanıcı kimliğini atayın
                     };
 
-                    _portfolioManager.AddPortfolio(portfolio);
+                    _portfolioService.AddPortfolio(portfolio);
 
                     // Token oluşturup döndürme
                     var token = TokenHandler.CreateToken(_configuration, user);
                     // Kullanıcının bakiyesini ve portfolyosunu çekme
-                    var balance = _balanceManager.GetUserBalance(user.Id); // Bakiye çekimi
-                    var userPortfolio = _portfolioManager.GetPortfolioByUserId(user.Id); // Portfolyo çekimi
+                    var balance = _balanceService.GetUserBalance(user.Id); // Bakiye çekimi
+                    var userPortfolio = _portfolioService.GetPortfolioByUserId(user.Id); // Portfolyo çekimi
 
                     // Token'i kullanarak bir işlem gerçekleştirebilirsiniz
                     return Ok(new
@@ -109,8 +110,8 @@ namespace StockMarket.API.Controllers
                     if (result.Succeeded)
                     {
                         var token = TokenHandler.CreateToken(_configuration, user);
-                        var balance = _balanceManager.GetUserBalance(user.Id); 
-                        var userPortfolio = _portfolioManager.GetPortfolioByUserId(user.Id);
+                        var balance = _balanceService.GetUserBalance(user.Id); 
+                        var userPortfolio = _portfolioService.GetPortfolioByUserId(user.Id);
                         
                         return Ok(new
                         {
@@ -135,14 +136,14 @@ namespace StockMarket.API.Controllers
         [HttpPost("updatesystembalance")]
         public IActionResult UpdateSystemBalance([FromBody] decimal newBalance)
         {
-            _systemBalanceManager.UpdateSystemBalance(newBalance);
+            _systemBalanceService.UpdateSystemBalance(newBalance);
             return Ok("Sistem bakiyesi güncellendi.");
         }
 
         [HttpGet("systembalance")]
         public IActionResult GetSystemBalance()
         {
-            var systemBalance = _systemBalanceManager.GetSystemBalance();
+            var systemBalance = _systemBalanceService.GetSystemBalance();
             return Ok(new { SystemBalance = systemBalance });
         }
 

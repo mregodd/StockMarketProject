@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace StockMarket.Business.Concrete
 {
     // Bakiye işlemlerini gerçekleştiren sınıf
-    public class BalanceManager : IBalanceManager
+    public class BalanceManager : IBalanceService
     {
         private readonly IBalanceRepository _balanceRepository;
 

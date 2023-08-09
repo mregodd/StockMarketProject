@@ -18,21 +18,20 @@ namespace StockMarket.DataAccess.Repositories
             _context = context;
         }
 
-        // Hisse senedi bilgilerini eklemek için metot
         public void AddPortfolio(UserPortfolio portfolio)
         {
             _context.UserPortfolios.Add(portfolio);
             _context.SaveChanges();
         }
 
-        public UserPortfolio GetPortfolioByUserId(int id)
+        public UserPortfolio GetPortfolioByUserId(int userId)
         {
-            var portfolio = _context.UserPortfolios.FirstOrDefault(p => p.AppUserId == id);
-            return portfolio;
+            return _context.UserPortfolios.FirstOrDefault(p => p.AppUserId == userId);
         }
-        public void DeletePortfolio(int id)
+
+        public void DeletePortfolio(int portfolioId)
         {
-            var portfolio = _context.UserPortfolios.FirstOrDefault(p => p.Id == id);
+            var portfolio = _context.UserPortfolios.FirstOrDefault(p => p.Id == portfolioId);
             if (portfolio != null)
             {
                 _context.UserPortfolios.Remove(portfolio);
@@ -50,9 +49,16 @@ namespace StockMarket.DataAccess.Repositories
                 portfolio.Value = updatedPortfolio.Value;
                 _context.SaveChanges();
             }
-
         }
 
+        public UserPortfolio GetPortfolioByUserIdAndStock(int userId, string stockName)
+        {
+            return _context.UserPortfolios.FirstOrDefault(p => p.AppUserId == userId && p.StockName == stockName);
+        }
+
+        public UserPortfolio GetPortfolioById(int id)
+        {
+            return _context.UserPortfolios.FirstOrDefault(p => p.Id == id);
+        }
     }
 }
-

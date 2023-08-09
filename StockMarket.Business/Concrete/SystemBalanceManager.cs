@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace StockMarket.Business.Concrete
 {
-    public class SystemBalanceManager : ISystemBalanceManager
+    public class SystemBalanceManager : ISystemBalanceService
     {
         private decimal _systemBalance;
 

@@ -26,7 +26,7 @@ namespace StockMarket.DataAccess.Concrete
                 NormalizedName = "ADMIN"
             });
         }
-        public DbSet<AppUser> Users { get; set; }
+        public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<UserPortfolio> UserPortfolios { get; set; }    
         public DbSet<UserBalance> UserBalances { get; set; }   
         public DbSet<SystemBalance> SystemBalances { get; set; }    

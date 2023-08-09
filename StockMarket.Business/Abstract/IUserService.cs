@@ -2,7 +2,7 @@
 
 namespace StockMarket.Business.Concrete
 {
-    public interface IUserManager
+    public interface IUserService
     {
         Task CreateUser(string username, string password);
         Task UpdateUser(AppUser user);

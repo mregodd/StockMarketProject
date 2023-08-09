@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace StockMarket.Business.Abstract
 {
-    public interface IBalanceManager
+    public interface IBalanceService
     {
         UserBalance GetUserBalance(int userId);
         void AddUserBalance(int userId, decimal amount);
