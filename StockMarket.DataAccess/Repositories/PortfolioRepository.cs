@@ -1,4 +1,5 @@
-﻿using StockMarket.DataAccess.Concrete;
+﻿using StockMarket.DataAccess.Abstract;
+using StockMarket.DataAccess.Concrete;
 using StockMarket.Entities.Concrete;
 using System;
 using System.Collections.Generic;
@@ -8,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace StockMarket.DataAccess.Repositories
 {
-    public class PortfolioManager
+    public class PortfolioRepository : IPortfolioRepository
     {
         private readonly Context _context;
 
-        public PortfolioManager(Context context)
+        public PortfolioRepository(Context context)
         {
             _context = context;
         }
@@ -24,13 +25,34 @@ namespace StockMarket.DataAccess.Repositories
             _context.SaveChanges();
         }
 
-        public object GetPortfolioByUserId(int ıd)
+        public UserPortfolio GetPortfolioByUserId(int id)
         {
-            throw new NotImplementedException();
+            var portfolio = _context.UserPortfolios.FirstOrDefault(p => p.AppUserId == id);
+            return portfolio;
+        }
+        public void DeletePortfolio(int id)
+        {
+            var portfolio = _context.UserPortfolios.FirstOrDefault(p => p.Id == id);
+            if (portfolio != null)
+            {
+                _context.UserPortfolios.Remove(portfolio);
+                _context.SaveChanges();
+            }
         }
 
-        // Diğer portföy işlemleri için metotlar buraya eklenebilir
-    }
+        public void UpdatePortfolio(UserPortfolio updatedPortfolio)
+        {
+            var portfolio = _context.UserPortfolios.FirstOrDefault(p => p.Id == updatedPortfolio.Id);
+            if (portfolio != null)
+            {
+                portfolio.StockName = updatedPortfolio.StockName;
+                portfolio.Quantity = updatedPortfolio.Quantity;
+                portfolio.Value = updatedPortfolio.Value;
+                _context.SaveChanges();
+            }
 
+        }
+
+    }
 }
 

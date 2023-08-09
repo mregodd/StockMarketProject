@@ -14,39 +14,39 @@ namespace StockMarket.Business.Concrete
     // Bakiye işlemlerini gerçekleştiren sınıf
     public class BalanceManager : IBalanceManager
     {
-        private readonly IBalanceRepository _balanceDal;
+        private readonly IBalanceRepository _balanceRepository;
 
-        public BalanceManager(IBalanceRepository balanceDal)
+        public BalanceManager(IBalanceRepository balanceRepository)
         {
-            _balanceDal = balanceDal;
+            _balanceRepository = balanceRepository;
         }
 
         public UserBalance GetUserBalance(int userId)
         {
             // Kullanıcının bakiyesini almak için veri erişim katmanını kullanın
-            return _balanceDal.GetUserBalance(userId);
+            return _balanceRepository.GetUserBalance(userId);
         }
 
         public void AddUserBalance(int userId, decimal amount)
         {
             // Kullanıcının bakiyesine amount kadar para eklemek için veri erişim katmanını kullanın
-            var userBalance = _balanceDal.GetUserBalance(userId);
+            var userBalance = _balanceRepository.GetUserBalance(userId);
             userBalance.Balance += amount;
-            _balanceDal.UpdateUserBalance(userBalance);
+            _balanceRepository.UpdateUserBalance(userBalance);
         }
 
         public void SubtractUserBalance(int userId, decimal amount)
         {
             // Kullanıcının bakiyesinden amount kadar para düşürmek için veri erişim katmanını kullanın
-            var userBalance = _balanceDal.GetUserBalance(userId);
+            var userBalance = _balanceRepository.GetUserBalance(userId);
             userBalance.Balance -= amount;
-            _balanceDal.UpdateUserBalance(userBalance);
+            _balanceRepository.UpdateUserBalance(userBalance);
         }
         public void UpdateUserBalance(UserBalance userBalance)
         {
 
             // Önce kullanıcının mevcut bakiyesini alın
-            UserBalance existingBalance = _balanceDal.GetUserBalance(userBalance.AppUserID);
+            UserBalance existingBalance = _balanceRepository.GetUserBalance(userBalance.AppUserID);
 
             // Güncellenmiş bakiyeyi hesaplayın
             decimal updatedBalance = existingBalance.Balance + userBalance.Balance;
@@ -54,8 +54,7 @@ namespace StockMarket.Business.Concrete
             // Yeni bakiyeyi UserBalance nesnesine atayın
             existingBalance.Balance = updatedBalance;
 
-            // _BalanceManager.UpdateUserBalance(userBalance);  // Gerek yok, bu satırı kaldırın
-            _balanceDal.UpdateUserBalance(existingBalance); // Veritabanına kaydedin
+            _balanceRepository.UpdateUserBalance(existingBalance); // Veritabanına kaydedin
 
 
         }

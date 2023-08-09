@@ -22,14 +22,25 @@ builder.Services.AddDbContext<Context>(options =>
     options.UseSqlServer("Server=DERBEDEK;Database=StockMarketDB;User Id=DBTest;Password=112233;TrustServerCertificate=True;"));
 
 
-builder.Services.AddIdentity<AppUser, AppRole>()
+builder.Services.AddIdentity<AppUser, AppRole>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 6;
+    options.User.RequireUniqueEmail = false;
+})
     .AddEntityFrameworkStores<Context>()
     .AddDefaultTokenProviders()
     .AddUserManager<UserManager<AppUser>>() // CustomUserManager yerine UserManager<AppUser> kullanýldý
     .AddRoles<AppRole>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
-builder.Services.AddScoped<PortfolioManager>(); // Örnek bir kullaným, size uygun þekilde ayarlayýn.
-
+builder.Services.AddScoped<IPortfolioRepository, PortfolioRepository>();
+builder.Services.AddScoped<IUserManager, UserManager>();
+builder.Services.AddScoped<IBalanceManager, BalanceManager>();
+builder.Services.AddScoped<IPortfolioManager, PortfolioManager>();
 
 builder.Services.AddSwaggerGen(c =>
 {

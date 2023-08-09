@@ -23,7 +23,7 @@ namespace StockMarket.API.Controllers
         private readonly IConfiguration _configuration;
 
 
-        public AuthController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration configuration, PortfolioManager portfolioManager,BalanceManager balanceManager,SystemBalanceManager systemBalanceManager)
+        public AuthController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration configuration,PortfolioManager portfolioManager,BalanceManager balanceManager,SystemBalanceManager systemBalanceManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
