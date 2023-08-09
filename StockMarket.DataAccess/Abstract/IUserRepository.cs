@@ -12,7 +12,7 @@ namespace StockMarket.DataAccess.Abstract
         Task CreateUser(string usernumber, string password);
         Task<AppUser> GetUserById(int userId);
         Task UpdateUser(AppUser user);
-
+        Task<int> SaveChangesAsync();
         Task DeleteUser(int userId);
     }
 

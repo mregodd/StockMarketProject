@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace StockMarket.DataAccess.Repositories
 {
-    public class BalanceRepository : IBalanceDal
+    public class BalanceRepository : IBalanceRepository
     {
         private readonly Context _context;
 
@@ -23,13 +23,6 @@ namespace StockMarket.DataAccess.Repositories
             // Kullanıcı bakiye bilgisini veritabanından çekme işlemi
             var userBalance = _context.UserBalances.FirstOrDefault(b => b.AppUserID == userId);
             return userBalance;
-        }
-
-        public SystemBalance GetSystemBalance()
-        {
-            // Sistem bakiye bilgisini veritabanından çekme işlemi veya başka bir kaynaktan alabilirsiniz
-            var systemBalance = new SystemBalance();
-            return systemBalance;
         }
 
         public void AddUserBalance(UserBalance userBalance)

@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace StockMarket.DataAccess.Abstract
 {
-    public interface IBalanceDal
+    public interface IBalanceRepository
     {
         UserBalance GetUserBalance(int userId);
-        SystemBalance GetSystemBalance();
         void AddUserBalance(UserBalance userBalance);
         void SubtractUserBalance(int userId, decimal amount);
         void UpdateUserBalance(UserBalance existingBalance);

@@ -14,25 +14,17 @@ namespace StockMarket.Business.Concrete
     // Bakiye işlemlerini gerçekleştiren sınıf
     public class BalanceManager : IBalanceManager
     {
-        private readonly IBalanceDal _balanceDal;
-        private readonly ISystemBalanceManager _systemBalanceManager;
+        private readonly IBalanceRepository _balanceDal;
 
-        public BalanceManager(IBalanceDal balanceDal, ISystemBalanceManager systemBalanceManager)
+        public BalanceManager(IBalanceRepository balanceDal)
         {
             _balanceDal = balanceDal;
-            _systemBalanceManager = systemBalanceManager;
         }
 
         public UserBalance GetUserBalance(int userId)
         {
             // Kullanıcının bakiyesini almak için veri erişim katmanını kullanın
             return _balanceDal.GetUserBalance(userId);
-        }
-
-        public SystemBalance GetSystemBalance()
-        {
-            // Sistem bakiyesini almak için manager sınıfını kullanın
-            return _balanceDal.GetSystemBalance();
         }
 
         public void AddUserBalance(int userId, decimal amount)

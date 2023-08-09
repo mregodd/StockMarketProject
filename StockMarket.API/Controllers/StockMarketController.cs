@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http.Headers;
 
 namespace StockMarket.API.Controllers
 {
     [ApiController]
     [Route("api/stock")]
+    [Authorize]
     public class StockMarketController : ControllerBase
     {
         [HttpGet("news")]
@@ -17,11 +20,15 @@ namespace StockMarket.API.Controllers
                     Method = HttpMethod.Get,
                     RequestUri = new Uri("https://yahoo-finance15.p.rapidapi.com/api/yahoo/ne/news"),
                     Headers =
-                {
-                    { "X-RapidAPI-Key", "3e89b3b45amsh277eb57ca06e20dp14c15ajsndbc08622f03e" },
-                    { "X-RapidAPI-Host", "yahoo-finance15.p.rapidapi.com" },
-                },
+                    {
+                        { "X-RapidAPI-Key", "3e89b3b45amsh277eb57ca06e20dp14c15ajsndbc08622f03e" },
+                        { "X-RapidAPI-Host", "yahoo-finance15.p.rapidapi.com" },
+                    },
                 };
+                
+                // Kullanıcı JWT tokenını Authorization başlığında gönder
+                var token = HttpContext.Request.Headers["Authorization"];
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 using (var response = await client.SendAsync(request))
                 {

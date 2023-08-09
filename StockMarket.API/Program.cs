@@ -21,12 +21,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<Context>(options =>
     options.UseSqlServer("Server=DERBEDEK;Database=StockMarketDB;User Id=DBTest;Password=112233;TrustServerCertificate=True;"));
 
+
 builder.Services.AddIdentity<AppUser, AppRole>()
     .AddEntityFrameworkStores<Context>()
     .AddDefaultTokenProviders()
     .AddUserManager<UserManager<AppUser>>() // CustomUserManager yerine UserManager<AppUser> kullanýldý
     .AddRoles<AppRole>();
-builder.Services.AddScoped<IBalanceDal, BalanceRepository>();
+builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
 builder.Services.AddScoped<PortfolioManager>(); // Örnek bir kullaným, size uygun þekilde ayarlayýn.
 
 
@@ -75,7 +76,7 @@ using (var scope = app.Services.CreateScope())
 {
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<AppRole>>();
 
-    var roles = new[] { "USERROLE", "Admin", /* diðer roller */ };
+    var roles = new[] { "USERROLE", "Admin", "User"};
     foreach (var role in roles)
     {
         if (!roleManager.RoleExistsAsync(role).Result)

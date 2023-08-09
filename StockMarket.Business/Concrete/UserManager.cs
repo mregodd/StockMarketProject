@@ -16,9 +16,9 @@ namespace StockMarket.Business.Concrete
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IUserRepository _userRepository;
-        private readonly IBalanceDal _balanceDal;
+        private readonly IBalanceRepository _balanceDal;
 
-        public UserManager(UserManager<AppUser> userManager, IUserRepository userRepository, IBalanceDal balanceDal)
+        public UserManager(UserManager<AppUser> userManager, IUserRepository userRepository, IBalanceRepository balanceDal)
         {
             _userManager = userManager;
             _userRepository = userRepository;
@@ -48,18 +48,24 @@ namespace StockMarket.Business.Concrete
             }
         }
 
-        public Task DeleteUser(int userId)
+        public async Task DeleteUser(int userId)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+
+            if (user != null)
+            {
+                await _userManager.DeleteAsync(user);
+            }
         }
 
-        public Task<AppUser> GetUserById(int userId)
+        public async Task<AppUser> GetUserById(int userId)
         {
-            throw new NotImplementedException();
+            return await _userManager.FindByIdAsync(userId.ToString());
         }
-        public Task UpdateUser(AppUser user)
+
+        public async Task UpdateUser(AppUser user)
         {
-            throw new NotImplementedException();
+            await _userManager.UpdateAsync(user);
         }
     }
 

@@ -12,8 +12,8 @@ using StockMarket.DataAccess.Concrete;
 namespace StockMarket.DataAccess.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20230807175434_InitialUpdate")]
-    partial class InitialUpdate
+    [Migration("20230807185628_mig_1")]
+    partial class mig_1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -160,7 +160,7 @@ namespace StockMarket.DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "d6a3520c-f1e8-464d-86f5-5b5a6cff91c4",
+                            ConcurrencyStamp = "c1f5b7ad-2c2c-473f-8efc-6b85b5d219b0",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });

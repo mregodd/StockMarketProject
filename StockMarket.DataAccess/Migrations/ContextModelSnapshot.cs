@@ -158,7 +158,7 @@ namespace StockMarket.DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "9b224eef-eda0-4466-9973-650ae15cc242",
+                            ConcurrencyStamp = "c1f5b7ad-2c2c-473f-8efc-6b85b5d219b0",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });

@@ -52,25 +52,10 @@ namespace StockMarket.DataAccess.Repositories
                 await _context.SaveChangesAsync();
             }
         }
+        public async Task<int> SaveChangesAsync()
+        {
+            return await _context.SaveChangesAsync();
+        }
     }
-
-    public class PortfolioManager
-    {
-        private readonly Context _context;
-
-        public PortfolioManager(Context context)
-        {
-            _context = context;
-        }
-
-        // Hisse senedi bilgilerini eklemek için metot
-        public void AddPortfolio(UserPortfolio portfolio)
-        {
-            _context.UserPortfolios.Add(portfolio);
-            _context.SaveChanges();
-        }
-
-        // Diğer portföy işlemleri için metotlar buraya eklenebilir
-    } 
-
 }
+    
