@@ -15,6 +15,6 @@ namespace StockMarket.Entities.Concrete
         public int Id { get; set; }
         
         [Column(TypeName = "decimal(18, 2)")]
-        public decimal Balance { get; set; } = 0; // Varsayılan olarak sıfır bakiye atıyoruz
+        public decimal Balance { get; set; } = 0; 
     }
 }

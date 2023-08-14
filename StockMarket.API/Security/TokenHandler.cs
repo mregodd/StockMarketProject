@@ -43,7 +43,5 @@ namespace StockMarket.API.Security
 
             return token;
         }
-
-
     }
 }

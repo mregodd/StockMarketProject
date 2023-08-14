@@ -12,7 +12,7 @@ using StockMarket.DataAccess.Concrete;
 namespace StockMarket.DataAccess.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20230807185628_mig_1")]
+    [Migration("20230814114932_mig_1")]
     partial class mig_1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -155,15 +155,6 @@ namespace StockMarket.DataAccess.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ConcurrencyStamp = "c1f5b7ad-2c2c-473f-8efc-6b85b5d219b0",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        });
                 });
 
             modelBuilder.Entity("StockMarket.Entities.Concrete.AppUser", b =>
@@ -267,16 +258,13 @@ namespace StockMarket.DataAccess.Migrations
 
             modelBuilder.Entity("StockMarket.Entities.Concrete.UserBalance", b =>
                 {
-                    b.Property<int>("AppUserID")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("AppUserId")
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AppUserID"), 1L, 1);
 
                     b.Property<decimal>("Balance")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("AppUserID");
+                    b.HasKey("AppUserId");
 
                     b.ToTable("UserBalances");
                 });
@@ -360,15 +348,33 @@ namespace StockMarket.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("StockMarket.Entities.Concrete.UserPortfolio", b =>
+            modelBuilder.Entity("StockMarket.Entities.Concrete.UserBalance", b =>
                 {
                     b.HasOne("StockMarket.Entities.Concrete.AppUser", "AppUser")
-                        .WithMany()
+                        .WithMany("UserBalances")
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("AppUser");
+                });
+
+            modelBuilder.Entity("StockMarket.Entities.Concrete.UserPortfolio", b =>
+                {
+                    b.HasOne("StockMarket.Entities.Concrete.AppUser", "AppUser")
+                        .WithMany("UserPortfolios")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+                });
+
+            modelBuilder.Entity("StockMarket.Entities.Concrete.AppUser", b =>
+                {
+                    b.Navigation("UserBalances");
+
+                    b.Navigation("UserPortfolios");
                 });
 #pragma warning restore 612, 618
         }

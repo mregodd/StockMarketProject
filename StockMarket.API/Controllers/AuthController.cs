@@ -47,6 +47,7 @@ namespace StockMarket.API.Controllers
                     Surname = "SurnameUser",
                     City = "UserCity",
                     District = "UserDistrict",
+                    UserBalance = 0,
 
                 };
 

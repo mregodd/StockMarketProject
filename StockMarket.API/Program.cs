@@ -11,6 +11,8 @@ using StockMarket.DataAccess.Abstract;
 using StockMarket.DataAccess.Concrete;
 
 using StockMarket.DataAccess.Repositories;
+using System.Security.Claims;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,7 +42,14 @@ builder.Services.AddScoped<IBalanceService, BalanceManager>();
 builder.Services.AddScoped<IPortfolioRepository, PortfolioRepository>();
 builder.Services.AddScoped<IPortfolioService, PortfolioManager>();
 builder.Services.AddScoped<ISystemBalanceService, SystemBalanceManager>();     
-builder.Services.AddScoped<ISystemBalanceRepository, SystemBalanceRepository>();   
+builder.Services.AddScoped<ISystemBalanceRepository, SystemBalanceRepository>();
+
+
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    options.JsonSerializerOptions.WriteIndented = true;
+});
 
 
 builder.Services.AddSwaggerGen(c =>
@@ -65,7 +74,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("AdminPolicy", policy =>
+    options.AddPolicy("AdminOnly", policy =>
     {
         policy.RequireRole("Admin");
         policy.RequireClaim("CreateUser");
@@ -79,44 +88,97 @@ builder.Services.AddControllers();
 // Configure the HTTP request pipeline.
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())//admin oluþturduk.
-{
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-
-if (!await roleManager.RoleExistsAsync("Admin"))
-{
-    await roleManager.CreateAsync(new IdentityRole("Admin"));
-}
-
-var adminUser = new IdentityUser
-{
-    UserName = "admin@example.com",
-    Email = "admin@example.com"
-};
-await userManager.CreateAsync(adminUser, "Admin123!");
-await userManager.AddToRoleAsync(adminUser, "Admin");
-
-}
-
 
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
-
-
-app.UseSwagger();
-app.UseSwaggerUI(c =>
+using (var scope = app.Services.CreateScope())
 {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API Name v1");
-});
-app.UseAuthentication();
-app.UseAuthorization();
+    var serviceProvider = scope.ServiceProvider;
+    var userManager = serviceProvider.GetRequiredService<UserManager<AppUser>>();
+    var roleManager = serviceProvider.GetRequiredService<RoleManager<AppRole>>();
+    var balanceRepository = serviceProvider.GetRequiredService<IBalanceRepository>();
+    var portfolioRepository = serviceProvider.GetRequiredService<IPortfolioRepository>();
 
-app.MapControllers();
+    var adminRoleExist = roleManager.RoleExistsAsync("Admin").Result;
+    if (!adminRoleExist)
+    {
+        var adminRole = new AppRole
+        {
+            Name = "Admin"
+        };
+        var result = roleManager.CreateAsync(adminRole).Result;
+    }
+    
+    
+    var roleExists = roleManager.RoleExistsAsync("User").Result;
 
-app.Run();
+    if (!roleExists)
+    {
+        var UserRole = new AppRole
+        {
+            Name = "User"
+        };
+        var result = roleManager.CreateAsync(UserRole).Result;
+    }
 
+    var adminUser = new AppUser
+    {
+        UserName = "ADMIN",
+        Name = "Admin",
+        Surname = "Admin",
+        City = "AdminCity",
+        District = "AdminDistrict",
+    };
 
-// Admin kullanýcýsýný oluþturma iþlemini burada yapabilirsiniz
+    var adminResult = await userManager.CreateAsync(adminUser, "1q2w3e4REE!"); // Admin kullanýcýsýnýn þifresi burada belirleniyor
+
+    if (adminResult.Succeeded)
+    {
+            if (!await userManager.IsInRoleAsync(adminUser, "Admin"))
+            {
+                await userManager.AddToRoleAsync(adminUser, "Admin"); // Admin kullanýcýsýna "Admin" rolü atanýyor
+            }
+
+            var adminBalance = new UserBalance
+            {
+                Balance = 10000,
+                AppUser = adminUser
+            };
+            balanceRepository.AddUserBalance(adminBalance); // Admin kullanýcýsýnýn bakiyesi sisteme ekleniyor
+
+            var adminPortfolio = new UserPortfolio
+            {
+                StockName = "Example Stock",
+                Quantity = 500,
+                Value = 5000,
+                AppUser = adminUser
+            };
+            portfolioRepository.AddPortfolio(adminPortfolio); // Admin kullanýcýsýnýn portfolyosu sisteme ekleniyor
+
+            // Admin kullanýcýsýnýn sahip olduðu yetkileri eklemek için claimler tanýmlanýr
+            var adminClaims = new List<Claim>
+            {
+                new Claim("CreateUser", "true"),
+                new Claim("DeleteUser", "true"),
+                new Claim(ClaimTypes.Name, adminUser.UserName)
+            };
+
+        await userManager.AddClaimsAsync(adminUser, adminClaims);
+    }
+
+}//rol oluþturucumuz
+
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API Name v1");
+    });
+    app.UseAuthentication();
+    app.UseAuthorization();
+
+    app.MapControllers();
+
+    app.Run();
+

@@ -21,8 +21,8 @@ namespace StockMarket.Entities.Concrete
         
         [Column(TypeName = "decimal(18, 2)")]
         public decimal UserBalance { get; set; }
-        public List<UserBalance> UserBalances { get; set; } // UserBalance koleksiyonu ile ilişkili özellik
-        public List<UserPortfolio> UserPortfolios { get; set; } // UserPortfolio koleksiyonu ile ilişkili özellik
+        public List<UserBalance> Balances { get; set; } = new List<UserBalance>();
+        public List<UserPortfolio> Portfolios { get; set; } = new List<UserPortfolio>();
 
     }
 }

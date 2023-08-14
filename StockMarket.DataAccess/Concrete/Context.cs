@@ -20,12 +20,12 @@ namespace StockMarket.DataAccess.Concrete
 
             modelBuilder.Entity<UserBalance>()
                 .HasOne(b => b.AppUser)
-                .WithMany(u => u.UserBalances)
+                .WithMany(u => u.Balances)
                 .HasForeignKey(b => b.AppUserId);
 
             modelBuilder.Entity<UserPortfolio>()
                 .HasOne(p => p.AppUser)
-                .WithMany(u => u.UserPortfolios)
+                .WithMany(u => u.Portfolios)
                 .HasForeignKey(p => p.AppUserId);
         }
         public DbSet<AppUser> AppUsers { get; set; }

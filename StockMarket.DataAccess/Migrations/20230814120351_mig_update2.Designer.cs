@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StockMarket.DataAccess.Concrete;
 
@@ -11,9 +12,10 @@ using StockMarket.DataAccess.Concrete;
 namespace StockMarket.DataAccess.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20230814120351_mig_update2")]
+    partial class mig_update2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -251,7 +253,7 @@ namespace StockMarket.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SystemBalances", (string)null);
+                    b.ToTable("SystemBalances");
                 });
 
             modelBuilder.Entity("StockMarket.Entities.Concrete.UserBalance", b =>
@@ -272,7 +274,7 @@ namespace StockMarket.DataAccess.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.ToTable("UserBalances", (string)null);
+                    b.ToTable("UserBalances");
                 });
 
             modelBuilder.Entity("StockMarket.Entities.Concrete.UserPortfolio", b =>
@@ -300,7 +302,7 @@ namespace StockMarket.DataAccess.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.ToTable("UserPortfolios", (string)null);
+                    b.ToTable("UserPortfolios");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
