@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StockMarket.DataAccess.Concrete;
 
@@ -11,9 +12,10 @@ using StockMarket.DataAccess.Concrete;
 namespace StockMarket.DataAccess.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20230816074935_mig_stockdata")]
+    partial class mig_stockdata
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -246,60 +248,20 @@ namespace StockMarket.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<string>("StockName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Symbol")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserPortfolioId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserPortfolioId");
 
                     b.ToTable("Stocks");
-                });
-
-            modelBuilder.Entity("StockMarket.Entities.Concrete.StockTransaction", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Symbol")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("TransactionDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("StockTransactions");
                 });
 
             modelBuilder.Entity("StockMarket.Entities.Concrete.SystemBalance", b =>
@@ -418,13 +380,6 @@ namespace StockMarket.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("StockMarket.Entities.Concrete.Stock", b =>
-                {
-                    b.HasOne("StockMarket.Entities.Concrete.UserPortfolio", null)
-                        .WithMany("Stocks")
-                        .HasForeignKey("UserPortfolioId");
-                });
-
             modelBuilder.Entity("StockMarket.Entities.Concrete.UserBalance", b =>
                 {
                     b.HasOne("StockMarket.Entities.Concrete.AppUser", "AppUser")
@@ -452,11 +407,6 @@ namespace StockMarket.DataAccess.Migrations
                     b.Navigation("Balances");
 
                     b.Navigation("Portfolios");
-                });
-
-            modelBuilder.Entity("StockMarket.Entities.Concrete.UserPortfolio", b =>
-                {
-                    b.Navigation("Stocks");
                 });
 #pragma warning restore 612, 618
         }

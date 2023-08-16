@@ -13,6 +13,7 @@ using StockMarket.DataAccess.Concrete;
 using StockMarket.DataAccess.Repositories;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
+using StockMarket.API.BackgroundServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,6 +44,11 @@ builder.Services.AddScoped<IPortfolioRepository, PortfolioRepository>();
 builder.Services.AddScoped<IPortfolioService, PortfolioManager>();
 builder.Services.AddScoped<ISystemBalanceService, SystemBalanceManager>();     
 builder.Services.AddScoped<ISystemBalanceRepository, SystemBalanceRepository>();
+builder.Services.AddScoped<IStockRepository, StockRepository>();
+builder.Services.AddScoped<IStockService, StockManager>();
+builder.Services.AddScoped<IStockDataFetcher, StockDataFetcher>();
+
+builder.Services.AddHostedService<StockUpdateService>();
 
 
 builder.Services.AddControllers().AddJsonOptions(options =>

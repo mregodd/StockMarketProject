@@ -41,7 +41,7 @@ namespace StockMarket.DataAccess.Repositories
         }
         public Stock GetStockByName(string name)
         {
-            return _context.Stocks.FirstOrDefault(s => s.Name == name);
+            return _context.Stocks.FirstOrDefault(s => s.StockName == name);
         }
     }
 

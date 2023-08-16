@@ -13,11 +13,18 @@ namespace StockMarket.Business.Concrete
     {
 
         private readonly IStockRepository _stockRepository;
-        public StockManager(IStockRepository stockRepository)
+        private readonly IStockDataFetcher _stockDataFetcher;
+        public StockManager(IStockRepository stockRepository, IStockDataFetcher stockDataFetcher)
         {
             _stockRepository = stockRepository;
+            _stockDataFetcher = stockDataFetcher;
         }
 
+        public async Task AddStockDataToDatabase(string symbol)
+        {
+            var stockData = await _stockDataFetcher.FetchStockData(symbol);
+            _stockRepository.AddStock(stockData);
+        }
         public void AddStock(Stock stock)
         {
             _stockRepository.AddStock(stock);
@@ -38,10 +45,27 @@ namespace StockMarket.Business.Concrete
             return _stockRepository.GetStockBySymbol(symbol);
         }
 
-        public void UpdateStock(Stock stock)
+        public async Task UpdateStockData()
         {
-            _stockRepository.UpdateStock(stock);
+            var symbols = new List<string> { "AAPL", "GOOGL", "MSFT" }; // Güncellenecek semboller
+
+            foreach (var symbol in symbols)
+            {
+                var stockData = await _stockDataFetcher.FetchStockData(symbol);
+
+                if (stockData != null)
+                {
+                    var existingStock = _stockRepository.GetStockBySymbol(symbol);
+
+                    if (existingStock != null)
+                    {
+                        existingStock.Price = stockData.Price; // Örnek olarak sadece fiyat güncelleniyor
+                        _stockRepository.UpdateStock(existingStock);
+                    }
+                }
+            }
         }
+
     }
 
 }

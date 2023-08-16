@@ -60,5 +60,23 @@ namespace StockMarket.DataAccess.Repositories
         {
             return _context.UserPortfolios.FirstOrDefault(p => p.Id == id);
         }
+
+        public int GetStockQuantityForUser(int userId, string symbol)
+        {
+            var userPortfolio = _context.UserPortfolios.FirstOrDefault(p => p.AppUserId == userId);
+            if (userPortfolio == null)
+            {
+                return 0; // Kullanıcının portfolyosu yoksa hissesi de yok demektir.
+            }
+
+            var stock = userPortfolio.Stocks.FirstOrDefault(s => s.StockName == symbol);
+            if (stock == null)
+            {
+                return 0; // Kullanıcının belirtilen sembolde hisse senedi yoksa miktar 0'dır.
+            }
+
+            var stockQuantity = stock.Quantity;
+            return stockQuantity;
+        }
     }
 }

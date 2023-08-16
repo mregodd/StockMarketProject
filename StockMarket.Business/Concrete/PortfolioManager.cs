@@ -88,5 +88,23 @@ namespace StockMarket.Business.Concrete
 
             return portfolio;
         }
+
+        public int GetStockQuantityForUser(int userId, string symbol)
+        {
+            var userPortfolio = _portfolioRepository.GetPortfolioByUserId(userId);
+            if (userPortfolio == null)
+            {
+                return 0; // Kullanıcının portfolyosu yoksa hissesi de yok demektir.
+            }
+
+            var stock = userPortfolio.Stocks.FirstOrDefault(s => s.Symbol == symbol);
+            if (stock == null)
+            {
+                return 0; // Kullanıcının belirtilen sembolde hisse senedi yoksa miktar 0'dır.
+            }
+
+            var stockQuantity = stock.Quantity;
+            return stockQuantity;
+        }
     }
 }

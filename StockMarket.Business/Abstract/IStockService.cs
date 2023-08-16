@@ -9,8 +9,9 @@ namespace StockMarket.Business.Abstract
 {
     public interface IStockService
     {
+        Task AddStockDataToDatabase(string symbol);
         void AddStock(Stock stock);
-        void UpdateStock(Stock stock);
+        Task UpdateStockData();
         void DeleteStock(Stock stock);
         Stock GetStockBySymbol(string symbol);
         Stock GetStockByName(string name);

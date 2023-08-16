@@ -128,6 +128,5 @@ namespace StockMarket.API.Controllers
     public class UpdateUserModel
     {
         public string Username { get; set; }
-        public string UserPassword { get; set; }
     }
 }

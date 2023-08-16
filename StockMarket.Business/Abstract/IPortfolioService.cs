@@ -15,5 +15,6 @@ namespace StockMarket.Business.Abstract
         void DeletePortfolio(int portfolioId);
         UserPortfolio GetPortfolioByUserIdAndStock(int userId, string stockName);
         UserPortfolio GetPortfolioById(int id);
+        int GetStockQuantityForUser(int userId, string symbol);
     }
 }
