@@ -32,6 +32,7 @@ namespace StockMarket.DataAccess.Concrete
         public DbSet<UserPortfolio> UserPortfolios { get; set; }    
         public DbSet<UserBalance> UserBalances { get; set; }   
         public DbSet<SystemBalance> SystemBalances { get; set; }    
+        public DbSet<Stock> Stocks { get; set; }    
     }
 
 }

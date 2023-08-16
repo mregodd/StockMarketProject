@@ -20,7 +20,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="6.0.20" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="YahooFinanceApi" Version="2.2.0" />
+    <PackageReference Include="YahooFinanceApi" Version="2.3.0" />
   </ItemGroup>
 
   <ItemGroup>
