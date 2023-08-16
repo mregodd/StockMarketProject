@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace StockMarket.Business.Concrete
 {
-    public class StockTransactionManager : IStockTransactionService
+    public class StockTransactionManager : IStockDataTransactionService
     {
-        private readonly IStockRepository _stockRepository;
+        private readonly IStockDataRepository _stockRepository;
         private readonly IBalanceRepository _balanceRepository;
         private readonly IPortfolioRepository _portfolioRepository;
         private readonly IStockTransactionRepository _transactionRepository;
 
-        public StockTransactionManager(IStockRepository stockRepository, IBalanceRepository balanceRepository, IStockTransactionRepository stockTransactionRepository, IPortfolioRepository portfolioRepository)
+        public StockTransactionManager(IStockDataRepository stockRepository, IBalanceRepository balanceRepository, IStockTransactionRepository stockTransactionRepository, IPortfolioRepository portfolioRepository)
         {
             _stockRepository = stockRepository;
             _balanceRepository = balanceRepository;
@@ -52,7 +52,7 @@ namespace StockMarket.Business.Concrete
                 Price = stock.Price,
                 TransactionDate = DateTime.UtcNow
             };
-            _transactionRepository.AddTransaction(transaction);
+            await _transactionRepository.AddTransactionAsync(transaction);
 
             return true;
         }
@@ -95,7 +95,7 @@ namespace StockMarket.Business.Concrete
                 Price = stock.Price,
                 TransactionDate = DateTime.UtcNow
             };
-            _transactionRepository.AddTransaction(transaction);
+            await _transactionRepository.AddTransactionAsync(transaction);
 
             return true;
         }

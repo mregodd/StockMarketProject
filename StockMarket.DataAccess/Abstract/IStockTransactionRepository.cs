@@ -9,7 +9,7 @@ namespace StockMarket.DataAccess.Abstract
 {
     public interface IStockTransactionRepository
     {
-        void AddTransaction(StockTransaction transaction);
+        Task AddTransactionAsync(StockTransaction transaction);
         Task<bool> BuyStock(string userId, string symbol, int quantity);
         Task<bool> SellStock(string userId, string symbol, int quantity);
     }

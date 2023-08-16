@@ -267,7 +267,7 @@ namespace StockMarket.DataAccess.Migrations
 
                     b.HasIndex("UserPortfolioId");
 
-                    b.ToTable("Stocks");
+                    b.ToTable("Stocks", (string)null);
                 });
 
             modelBuilder.Entity("StockMarket.Entities.Concrete.StockTransaction", b =>
@@ -299,7 +299,7 @@ namespace StockMarket.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("StockTransactions");
+                    b.ToTable("StockTransactions", (string)null);
                 });
 
             modelBuilder.Entity("StockMarket.Entities.Concrete.SystemBalance", b =>
@@ -315,7 +315,7 @@ namespace StockMarket.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SystemBalances");
+                    b.ToTable("SystemBalances", (string)null);
                 });
 
             modelBuilder.Entity("StockMarket.Entities.Concrete.UserBalance", b =>
@@ -336,7 +336,7 @@ namespace StockMarket.DataAccess.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.ToTable("UserBalances");
+                    b.ToTable("UserBalances", (string)null);
                 });
 
             modelBuilder.Entity("StockMarket.Entities.Concrete.UserPortfolio", b =>
@@ -364,7 +364,7 @@ namespace StockMarket.DataAccess.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.ToTable("UserPortfolios");
+                    b.ToTable("UserPortfolios", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

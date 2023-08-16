@@ -18,10 +18,10 @@ namespace StockMarket.DataAccess.Repositories
             _context = context;
         }
 
-        public void AddTransaction(StockTransaction transaction)
+        public async Task AddTransactionAsync(StockTransaction transaction)
         {
             _context.StockTransactions.Add(transaction);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         public Task<bool> BuyStock(string userId, string symbol, int quantity)

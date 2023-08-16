@@ -8,28 +8,33 @@ namespace StockMarket.Business.Concrete
 {
     public class StockDataFetcher : IStockDataFetcher
     {
-        public async Task<Stock> FetchStockData(string symbol)
-        {
-            using (var client = new HttpClient())
-            {
-                var request = new HttpRequestMessage
-                {
-                    Method = HttpMethod.Get,
-                    RequestUri = new Uri($"https://yahoo-finance15.p.rapidapi.com/api/yahoo/stock/{symbol}"),
-                    Headers =
-                    {
-                        { "X-RapidAPI-Key", "3e89b3b45amsh277eb57ca06e20dp14c15ajsndbc08622f03e" },
-                        { "X-RapidAPI-Host", "yahoo-finance15.p.rapidapi.com" },
-                    },
-                };
+        private readonly IHttpClientFactory _httpClientFactory;
 
-                using (var response = await client.SendAsync(request))
-                {
-                    response.EnsureSuccessStatusCode();
-                    var content = await response.Content.ReadAsStringAsync();
-                    var stockData = JsonConvert.DeserializeObject<Stock>(content);
-                    return stockData;
-                }
+        public StockDataFetcher(IHttpClientFactory httpClientFactory)
+        {
+            _httpClientFactory = httpClientFactory;
+        }
+
+        public async Task<StockData> FetchStockData(string symbol)
+        {
+            var apiKey = "3e89b3b45amsh277eb57ca06e20dp14c15ajsndbc08622f03e"; // RapidAPI'den aldığınız API anahtarı
+            var httpClient = _httpClientFactory.CreateClient();
+
+            var endpointUrl = $"https://yahoo-finance15.p.rapidapi.com/api/yahoo/qu/quote?symbol={symbol}"; // RapidAPI endpoint'i
+            httpClient.DefaultRequestHeaders.Add("3e89b3b45amsh277eb57ca06e20dp14c15ajsndbc08622f03e", apiKey);
+
+            var response = await httpClient.GetAsync(endpointUrl);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var stockData = JsonConvert.DeserializeObject<StockData>(responseContent);
+                return stockData;
+            }
+            else
+            {
+                Console.WriteLine($"Sembol için stok verileri getirilemedi {symbol}. StatusCode: {response.StatusCode}");
+                return null;
             }
         }
     }

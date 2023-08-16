@@ -21,7 +21,7 @@ namespace StockMarket.Entities.Concrete
         // Navigasyon özellikleri
         public int AppUserId { get; set; }
         public AppUser AppUser { get; set; }
-        public List<Stock> Stocks { get; set; }
+        public List<StockData> Stocks { get; set; }
     }
 
 }

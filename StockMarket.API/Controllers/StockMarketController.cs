@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using StockMarket.API.Security;
 using StockMarket.Business.Abstract;
+using StockMarket.Entities.Concrete;
 using System.Net.Http.Headers;
 
 namespace StockMarket.API.Controllers
@@ -13,9 +15,9 @@ namespace StockMarket.API.Controllers
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IStockDataFetcher _stockDataFetcher;
-        private readonly IStockService _stockService;
+        private readonly IStockDataService _stockService;
 
-        public StockMarketController(IHttpClientFactory httpClientFactory, IStockDataFetcher stockDataFetcher, IStockService stockService)
+        public StockMarketController(IHttpClientFactory httpClientFactory, IStockDataFetcher stockDataFetcher, IStockDataService stockService)
         {
             _httpClientFactory = httpClientFactory;
             _stockDataFetcher = stockDataFetcher;
@@ -60,6 +62,8 @@ namespace StockMarket.API.Controllers
                     RequestUri = new Uri("https://yahoo-finance15.p.rapidapi.com/api/yahoo/hi/history/AAPL/15m?diffandsplits=false"),
                 };
 
+                var token = HttpContext.Request.Headers["Authorization"];
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 client.DefaultRequestHeaders.Add("X-RapidAPI-Key", "3e89b3b45amsh277eb57ca06e20dp14c15ajsndbc08622f03e");
                 client.DefaultRequestHeaders.Add("X-RapidAPI-Host", "yahoo-finance15.p.rapidapi.com");
 
@@ -67,15 +71,11 @@ namespace StockMarket.API.Controllers
                 {
                     response.EnsureSuccessStatusCode();
                     var body = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine(body); // İsteğin sonucunu konsola yazdırabilirsiniz.
-
-                    // Eğer API'den gelen veriyi JSON olarak çözmek isterseniz aşağıdaki gibi yapabilirsiniz:
-                    // var parsedData = JsonConvert.DeserializeObject<YourModelClass>(body);
-
                     return Ok(body); // İsteğin sonucunu HTTP yanıtı olarak döndürün
                 }
             }
         }
+
         [HttpGet("fetch-and-add")]
         public async Task<IActionResult> FetchAndAddStockData(string symbol)
         {
@@ -83,13 +83,24 @@ namespace StockMarket.API.Controllers
 
             if (stockData != null)
             {
-                _stockService.AddStock(stockData);
+                var stock = new StockData
+                {
+                    Symbol = stockData.Symbol,
+                    StockName = stockData.StockName,
+                    Price = stockData.Price,
+                    // Diğer gerekli özellikleri doldurabilirsiniz
+                };
+
+                // Veriyi veritabanına kaydet
+                _stockService.AddStock(stock);
+
                 return Ok("Stock data fetched and added to the database.");
             }
             else
             {
                 return BadRequest("Failed to fetch stock data.");
             }
+
         }
 
     }

@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace StockMarket.Business.Concrete
 {
-    public class StockManager : IStockService
+    public class StockDataManager : IStockDataService
     {
 
-        private readonly IStockRepository _stockRepository;
+        private readonly IStockDataRepository _stockRepository;
         private readonly IStockDataFetcher _stockDataFetcher;
-        public StockManager(IStockRepository stockRepository, IStockDataFetcher stockDataFetcher)
+        public StockDataManager(IStockDataRepository stockRepository, IStockDataFetcher stockDataFetcher)
         {
             _stockRepository = stockRepository;
             _stockDataFetcher = stockDataFetcher;
@@ -25,22 +25,22 @@ namespace StockMarket.Business.Concrete
             var stockData = await _stockDataFetcher.FetchStockData(symbol);
             _stockRepository.AddStock(stockData);
         }
-        public void AddStock(Stock stock)
+        public void AddStock(StockData stockData)
         {
-            _stockRepository.AddStock(stock);
+            _stockRepository.AddStock(stockData);
         }
 
-        public void DeleteStock(Stock stock)
+        public void DeleteStock(StockData stockData)
         {
-            _stockRepository.DeleteStock(stock);
+            _stockRepository.DeleteStock(stockData);
         }
 
-        public Stock GetStockByName(string name)
+        public StockData GetStockByName(string name)
         {
             return _stockRepository.GetStockByName(name);
         }
 
-        public Stock GetStockBySymbol(string symbol)
+        public StockData GetStockBySymbol(string symbol)
         {
             return _stockRepository.GetStockBySymbol(symbol);
         }

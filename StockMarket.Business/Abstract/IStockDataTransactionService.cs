@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace StockMarket.Business.Abstract
 {
-    public interface IStockTransactionService
+    public interface IStockDataTransactionService
     {
         Task<bool> BuyStock(int userId, string symbol, int quantity);
         Task<bool> SellStock(int userId, string symbol, int quantity);

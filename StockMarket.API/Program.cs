@@ -9,7 +9,6 @@ using StockMarket.Business.Abstract;
 using Microsoft.AspNetCore.Identity;
 using StockMarket.DataAccess.Abstract;
 using StockMarket.DataAccess.Concrete;
-
 using StockMarket.DataAccess.Repositories;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
@@ -44,12 +43,13 @@ builder.Services.AddScoped<IPortfolioRepository, PortfolioRepository>();
 builder.Services.AddScoped<IPortfolioService, PortfolioManager>();
 builder.Services.AddScoped<ISystemBalanceService, SystemBalanceManager>();     
 builder.Services.AddScoped<ISystemBalanceRepository, SystemBalanceRepository>();
-builder.Services.AddScoped<IStockRepository, StockRepository>();
-builder.Services.AddScoped<IStockService, StockManager>();
+builder.Services.AddScoped<IStockDataRepository, StockDataRepository>();
+builder.Services.AddScoped<IStockDataService, StockDataManager>();
 builder.Services.AddScoped<IStockDataFetcher, StockDataFetcher>();
 
 builder.Services.AddHostedService<StockUpdateService>();
 
+builder.Services.AddHttpClient();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
@@ -61,6 +61,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API Name", Version = "v1" });
+    c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
 });
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer

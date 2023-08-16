@@ -35,7 +35,7 @@ namespace StockMarket.API.Controllers
 
         }
 
-        [HttpPost("Register")]
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
             if (ModelState.IsValid)
@@ -97,7 +97,7 @@ namespace StockMarket.API.Controllers
         }
 
 
-        [HttpPost("Login")]
+        [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
             if (ModelState.IsValid)

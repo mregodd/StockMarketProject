@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace StockMarket.Entities.Concrete
 {
-    public class Stock
+    public class StockData
     {
         public int Id { get; set; }
         public string Symbol { get; set; }

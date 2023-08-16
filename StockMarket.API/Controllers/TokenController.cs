@@ -22,7 +22,7 @@ namespace StockMarket.API.Controllers
             _signInManager = signInManager;
         }
 
-        [HttpPost("Create")]
+        [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] LoginModel model)
         {
             if (ModelState.IsValid)
@@ -42,3 +42,4 @@ namespace StockMarket.API.Controllers
         }
     }
 }
+

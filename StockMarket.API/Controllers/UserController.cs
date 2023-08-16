@@ -36,10 +36,9 @@ namespace StockMarket.API.Controllers
 
             return Ok(new { Balance = balance.Balance });
         }
-
         [Authorize("AdminOnly")]
         [HttpPost("{userId}/addbalance")]
-        public IActionResult AddUserBalance(int userId, [FromBody] decimal amount)
+        public IActionResult AddUserBalance(int userId, [FromBody] AddBalanceModel model)
         {
             var user = _userService.GetUserById(userId).Result;
 
@@ -48,14 +47,14 @@ namespace StockMarket.API.Controllers
                 return NotFound("Kullanıcı bulunamadı.");
             }
 
-            _balanceService.AddUserBalance(userId, amount);
+            _balanceService.AddUserBalance(userId, model.Amount);
 
             return Ok("Bakiye başarıyla eklendi.");
         }
 
         [Authorize("AdminOnly")]
         [HttpPost("{userId}/subtractbalance")]
-        public IActionResult SubtractUserBalance(int userId, [FromBody] decimal amount)
+        public IActionResult SubtractUserBalance(int userId, [FromBody] AddBalanceModel model)
         {
             var user = _userService.GetUserById(userId).Result;
 
@@ -64,13 +63,13 @@ namespace StockMarket.API.Controllers
                 return NotFound("Kullanıcı bulunamadı.");
             }
 
-            _balanceService.SubtractUserBalance(userId, amount);
+            _balanceService.SubtractUserBalance(userId, model.Amount);
 
             return Ok("Bakiyeden para düşürüldü.");
         }
 
         [Authorize("AdminOnly")]
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserModel model)
         {
             if (!ModelState.IsValid)
@@ -129,4 +128,6 @@ namespace StockMarket.API.Controllers
     {
         public string Username { get; set; }
     }
+
 }
+

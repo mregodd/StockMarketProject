@@ -27,7 +27,7 @@ namespace StockMarket.DataAccess.Concrete
                 .HasOne(p => p.AppUser)
                 .WithMany(u => u.Portfolios)
                 .HasForeignKey(p => p.AppUserId);
-            modelBuilder.Entity<Stock>()
+            modelBuilder.Entity<StockData>()
             .Property(s => s.Price)
             .HasColumnType("decimal(18, 2)");
             modelBuilder.Entity<StockTransaction>()
@@ -39,7 +39,7 @@ namespace StockMarket.DataAccess.Concrete
         public DbSet<UserPortfolio> UserPortfolios { get; set; }    
         public DbSet<UserBalance> UserBalances { get; set; }   
         public DbSet<SystemBalance> SystemBalances { get; set; }    
-        public DbSet<Stock> Stocks { get; set; }    
+        public DbSet<StockData> StockDatas { get; set; }    
         public DbSet<StockTransaction> StockTransactions { get; set; }  
     }
 

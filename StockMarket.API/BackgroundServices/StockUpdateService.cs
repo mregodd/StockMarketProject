@@ -22,7 +22,7 @@ namespace StockMarket.API.BackgroundServices
             {
                 using (var scope = _services.CreateScope())
                 {
-                    var stockService = scope.ServiceProvider.GetRequiredService<IStockService>();
+                    var stockService = scope.ServiceProvider.GetRequiredService<IStockDataService>();
 
                     // Burada hisse senedi verilerini çekip veritabanını güncelleyebilirsiniz
                     await stockService.UpdateStockData();

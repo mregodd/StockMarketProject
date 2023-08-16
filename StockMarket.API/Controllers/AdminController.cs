@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using StockMarket.Business.Abstract;
+using StockMarket.Business.Concrete;
 
 namespace StockMarket.API.Controllers
 {
@@ -15,5 +17,5 @@ namespace StockMarket.API.Controllers
             return Ok("Bu, sadece admin kullanıcıların erişebileceği bir endpoint.");
         }
     }
-
 }
+

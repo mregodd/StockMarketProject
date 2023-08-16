@@ -9,7 +9,7 @@ namespace StockMarket.Business.Abstract
 {
     public interface IStockDataFetcher
     {
-        Task<Stock> FetchStockData(string symbol);
+        Task<StockData> FetchStockData(string symbol);
     }
 
 }
