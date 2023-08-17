@@ -113,7 +113,7 @@ namespace StockMarket.API.Controllers
             return Ok(stock);
         }
 
-        [HttpGet("StockName/{name}")]
+        [HttpGet("stockname/{name}")]
         public async Task<IActionResult> GetStockByName(string name)
         {
             var stock = await _stockDataService.GetStockByNameAsync(name);

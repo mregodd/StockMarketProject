@@ -15,11 +15,13 @@ namespace StockMarket.API.Controllers
     {
         private readonly IUserService _userService;
         private readonly IBalanceService _balanceService;
+        private readonly IPortfolioService _portfolioService;
 
-        public UserController(IUserService userService, IBalanceService balanceService)
+        public UserController(IUserService userService, IBalanceService balanceService,IPortfolioService portfolioService)
         {
             _userService = userService;
             _balanceService = balanceService;
+            _portfolioService = portfolioService;
         }
 
         [HttpGet("{userId}/balance")]
@@ -128,6 +130,34 @@ namespace StockMarket.API.Controllers
             }
 
             return Ok(user);
+        }
+        [HttpGet("portfoliobyid/{userId}")]
+        public async Task<IActionResult> GetPortfolioByUserId(int userId)
+        {
+            try
+            {
+                var portfolio = await _portfolioService.GetPortfolioByUserIdAsync(userId);
+                return Ok(portfolio);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize("AdminOnly")]
+        [HttpDelete("deleteportfolio/{portfolioId}")]
+        public async Task<IActionResult> DeletePortfolio(int portfolioId)
+        {
+            try
+            {
+                await _portfolioService.DeletePortfolioAsync(portfolioId);
+                return Ok("Portföy başarıyla silindi.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 
