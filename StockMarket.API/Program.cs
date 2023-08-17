@@ -163,7 +163,7 @@ using (var scope = app.Services.CreateScope())
                 Value = 5000,
                 AppUser = adminUser
             };
-            portfolioRepository.AddPortfolio(adminPortfolio); // Admin kullanýcýsýnýn portfolyosu sisteme ekleniyor
+            await portfolioRepository.AddPortfolioAsync(adminPortfolio); // Admin kullanýcýsýnýn portfolyosu sisteme ekleniyor
 
             // Admin kullanýcýsýnýn sahip olduðu yetkileri eklemek için claimler tanýmlanýr
             var adminClaims = new List<Claim>

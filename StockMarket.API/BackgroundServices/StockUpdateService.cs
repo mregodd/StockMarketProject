@@ -25,7 +25,7 @@ namespace StockMarket.API.BackgroundServices
                     var stockService = scope.ServiceProvider.GetRequiredService<IStockDataService>();
 
                     // Burada hisse senedi verilerini çekip veritabanını güncelleyebilirsiniz
-                    await stockService.UpdateStockData();
+                    await stockService.UpdateStockDataAsync();
 
                     // Belirli bir aralıkta çalışmasını sağlamak için bekleme yapın
                     await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);

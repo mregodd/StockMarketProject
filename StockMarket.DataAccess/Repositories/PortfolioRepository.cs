@@ -1,4 +1,5 @@
-﻿using StockMarket.DataAccess.Abstract;
+﻿using Microsoft.EntityFrameworkCore;
+using StockMarket.DataAccess.Abstract;
 using StockMarket.DataAccess.Concrete;
 using StockMarket.Entities.Concrete;
 using System;
@@ -18,58 +19,58 @@ namespace StockMarket.DataAccess.Repositories
             _context = context;
         }
 
-        public void AddPortfolio(UserPortfolio portfolio)
+        public async Task AddPortfolioAsync(UserPortfolio portfolio)
         {
             _context.UserPortfolios.Add(portfolio);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public UserPortfolio GetPortfolioByUserId(int userId)
+        public async Task<UserPortfolio> GetPortfolioByUserIdAsync(int userId)
         {
-            return _context.UserPortfolios.FirstOrDefault(p => p.AppUserId == userId);
+            return await Task.FromResult(_context.UserPortfolios.FirstOrDefault(p => p.AppUserId == userId));
         }
 
-        public void DeletePortfolio(int portfolioId)
+        public async Task DeletePortfolioAsync(int portfolioId)
         {
-            var portfolio = _context.UserPortfolios.FirstOrDefault(p => p.Id == portfolioId);
+            var portfolio = await _context.UserPortfolios.FindAsync(portfolioId);
             if (portfolio != null)
             {
                 _context.UserPortfolios.Remove(portfolio);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
         }
 
-        public void UpdatePortfolio(UserPortfolio updatedPortfolio)
+        public async Task UpdatePortfolioAsync(UserPortfolio updatedPortfolio)
         {
-            var portfolio = _context.UserPortfolios.FirstOrDefault(p => p.Id == updatedPortfolio.Id);
+            var portfolio = await _context.UserPortfolios.FindAsync(updatedPortfolio.Id);
             if (portfolio != null)
             {
                 portfolio.StockName = updatedPortfolio.StockName;
                 portfolio.Quantity = updatedPortfolio.Quantity;
                 portfolio.Value = updatedPortfolio.Value;
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
         }
 
-        public UserPortfolio GetPortfolioByUserIdAndStock(int userId, string stockName)
+        public async Task<UserPortfolio> GetPortfolioByUserIdAndStockAsync(int userId, string stockName)
         {
-            return _context.UserPortfolios.FirstOrDefault(p => p.AppUserId == userId && p.StockName == stockName);
+            return await Task.FromResult(_context.UserPortfolios.FirstOrDefault(p => p.AppUserId == userId && p.StockName == stockName));
         }
 
-        public UserPortfolio GetPortfolioById(int id)
+        public async Task<UserPortfolio> GetPortfolioByIdAsync(int id)
         {
-            return _context.UserPortfolios.FirstOrDefault(p => p.Id == id);
+            return await Task.FromResult(_context.UserPortfolios.FirstOrDefault(p => p.Id == id));
         }
 
-        public int GetStockQuantityForUser(int userId, string symbol)
+        public async Task<int> GetStockQuantityForUserAsync(int userId, string symbol)
         {
-            var userPortfolio = _context.UserPortfolios.FirstOrDefault(p => p.AppUserId == userId);
+            var userPortfolio = await _context.UserPortfolios.FirstOrDefaultAsync(p => p.AppUserId == userId);
             if (userPortfolio == null)
             {
                 return 0; // Kullanıcının portfolyosu yoksa hissesi de yok demektir.
             }
 
-            var stock = userPortfolio.Stocks.FirstOrDefault(s => s.StockName == symbol);
+            var stock = userPortfolio.StockData.FirstOrDefault(s => s.StockName == symbol);
             if (stock == null)
             {
                 return 0; // Kullanıcının belirtilen sembolde hisse senedi yoksa miktar 0'dır.

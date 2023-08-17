@@ -67,13 +67,13 @@ namespace StockMarket.API.Controllers
                         AppUser = user // Kullanıcı kimliğini atayın
                     };
 
-                    _portfolioService.AddPortfolio(portfolio);
+                    await _portfolioService.AddPortfolioAsync(portfolio);
 
                     // Token oluşturup döndürme
                     var token = TokenHandler.CreateToken(_configuration, user);
                     // Kullanıcının bakiyesini ve portfolyosunu çekme
                     var balance = _balanceService.GetUserBalance(user.Id); // Bakiye çekimi
-                    var userPortfolio = _portfolioService.GetPortfolioByUserId(user.Id); // Portfolyo çekimi
+                    var userPortfolio = _portfolioService.GetPortfolioByUserIdAsync(user.Id); // Portfolyo çekimi
 
                     // Token'i kullanarak bir işlem gerçekleştirebilirsiniz
                     return Ok(new
@@ -110,7 +110,7 @@ namespace StockMarket.API.Controllers
                     {
                         var token = TokenHandler.CreateToken(_configuration, user);
                         var balance = _balanceService.GetUserBalance(user.Id);
-                        var userPortfolio = _portfolioService.GetPortfolioByUserId(user.Id);
+                        var userPortfolio = _portfolioService.GetPortfolioByUserIdAsync(user.Id);
 
                         return Ok(new
                         {

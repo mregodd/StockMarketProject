@@ -18,20 +18,20 @@ namespace StockMarket.Business.Concrete
             _portfolioRepository = portfolioRepository;
         }
 
-        public void AddPortfolio(UserPortfolio portfolio)
+        public async Task AddPortfolioAsync(UserPortfolio portfolio)
         {
-            var existingPortfolio = _portfolioRepository.GetPortfolioByUserIdAndStock(portfolio.AppUserId, portfolio.StockName);
+            var existingPortfolio = await _portfolioRepository.GetPortfolioByUserIdAndStockAsync(portfolio.AppUserId, portfolio.StockName);
             if (existingPortfolio != null)
             {
                 throw new InvalidOperationException("Aynı hisse senedi zaten portföyde.");
             }
 
-            _portfolioRepository.AddPortfolio(portfolio);
+            await _portfolioRepository.AddPortfolioAsync(portfolio);
         }
 
-        public UserPortfolio GetPortfolioByUserId(int userId)
+        public async Task<UserPortfolio> GetPortfolioByUserIdAsync(int userId)
         {
-            var portfolio = _portfolioRepository.GetPortfolioByUserId(userId);
+            var portfolio = await _portfolioRepository.GetPortfolioByUserIdAsync(userId);
             if (portfolio == null)
             {
                 throw new InvalidOperationException("Kullanıcının portföyü bulunmamaktadır.");
@@ -40,9 +40,9 @@ namespace StockMarket.Business.Concrete
             return portfolio;
         }
 
-        public void UpdatePortfolio(UserPortfolio portfolio)
+        public async Task UpdatePortfolioAsync(UserPortfolio portfolio)
         {
-            var existingPortfolio = _portfolioRepository.GetPortfolioById(portfolio.Id);
+            var existingPortfolio = await _portfolioRepository.GetPortfolioByIdAsync(portfolio.Id);
             if (existingPortfolio == null)
             {
                 throw new InvalidOperationException("Portföy bulunamadı.");
@@ -53,23 +53,23 @@ namespace StockMarket.Business.Concrete
                 throw new InvalidOperationException("Bu portföy kullanıcısına ait değil.");
             }
 
-            _portfolioRepository.UpdatePortfolio(portfolio);
+            await _portfolioRepository.UpdatePortfolioAsync(portfolio);
         }
 
-        public void DeletePortfolio(int portfolioId)
+        public async Task DeletePortfolioAsync(int portfolioId)
         {
-            var existingPortfolio = _portfolioRepository.GetPortfolioById(portfolioId);
+            var existingPortfolio = await _portfolioRepository.GetPortfolioByIdAsync(portfolioId);
             if (existingPortfolio == null)
             {
                 throw new InvalidOperationException("Portföy bulunamadı.");
             }
 
-            _portfolioRepository.DeletePortfolio(portfolioId);
+            await _portfolioRepository.DeletePortfolioAsync(portfolioId);
         }
 
-        public UserPortfolio GetPortfolioByUserIdAndStock(int userId, string stockName)
+        public async Task<UserPortfolio> GetPortfolioByUserIdAndStockAsync(int userId, string stockName)
         {
-            var portfolio = _portfolioRepository.GetPortfolioByUserIdAndStock(userId, stockName);
+            var portfolio = await _portfolioRepository.GetPortfolioByUserIdAndStockAsync(userId, stockName);
             if (portfolio == null)
             {
                 throw new InvalidOperationException("Kullanıcının belirtilen hisse senedi portföyü bulunmamaktadır.");
@@ -78,9 +78,9 @@ namespace StockMarket.Business.Concrete
             return portfolio;
         }
 
-        public UserPortfolio GetPortfolioById(int id)
+        public async Task<UserPortfolio> GetPortfolioByIdAsync(int id)
         {
-            var portfolio = _portfolioRepository.GetPortfolioById(id);
+            var portfolio = await _portfolioRepository.GetPortfolioByIdAsync(id);
             if (portfolio == null)
             {
                 throw new InvalidOperationException("Portföy bulunamadı.");
@@ -89,15 +89,15 @@ namespace StockMarket.Business.Concrete
             return portfolio;
         }
 
-        public int GetStockQuantityForUser(int userId, string symbol)
+        public async Task<int> GetStockQuantityForUserAsync(int userId, string symbol)
         {
-            var userPortfolio = _portfolioRepository.GetPortfolioByUserId(userId);
+            var userPortfolio = await _portfolioRepository.GetPortfolioByUserIdAsync(userId);
             if (userPortfolio == null)
             {
                 return 0; // Kullanıcının portfolyosu yoksa hissesi de yok demektir.
             }
 
-            var stock = userPortfolio.Stocks.FirstOrDefault(s => s.Symbol == symbol);
+            var stock = userPortfolio.StockData.FirstOrDefault(s => s.Symbol == symbol);
             if (stock == null)
             {
                 return 0; // Kullanıcının belirtilen sembolde hisse senedi yoksa miktar 0'dır.

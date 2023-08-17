@@ -28,6 +28,4 @@ namespace StockMarket.Business.Concrete
             _systemBalance = newBalance;
         }
     }
-
-
 }

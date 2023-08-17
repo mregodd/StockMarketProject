@@ -15,13 +15,13 @@ namespace StockMarket.API.Controllers
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IStockDataFetcherService _stockDataFetcher;
-        private readonly IStockDataService _stockService;
+        private readonly IStockDataService _stockDataService;
 
-        public StockMarketController(IHttpClientFactory httpClientFactory, IStockDataFetcherService stockDataFetcher, IStockDataService stockService)
+        public StockMarketController(IHttpClientFactory httpClientFactory, IStockDataFetcherService stockDataFetcher, IStockDataService stockDataService)
         {
             _httpClientFactory = httpClientFactory;
             _stockDataFetcher = stockDataFetcher;
-            _stockService = stockService;
+            _stockDataService = stockDataService;
         }
 
         [HttpGet("news")]
@@ -92,7 +92,7 @@ namespace StockMarket.API.Controllers
                 };
 
                 // Veriyi veritabanına kaydet
-                _stockService.AddStock(stock);
+                await _stockDataService.AddStockAsync(stock);
 
                 return Ok("Stock data fetched and added to the database.");
             }
@@ -101,6 +101,38 @@ namespace StockMarket.API.Controllers
                 return BadRequest("Failed to fetch stock data.");
             }
 
+        }
+
+        [HttpGet("{symbol}")]
+        public async Task<IActionResult> GetStockBySymbol(string symbol)
+        {
+            var stock = await _stockDataService.GetStockBySymbolAsync(symbol);
+            if (stock == null)
+                return NotFound();
+
+            return Ok(stock);
+        }
+
+        [HttpGet("StockName/{name}")]
+        public async Task<IActionResult> GetStockByName(string name)
+        {
+            var stock = await _stockDataService.GetStockByNameAsync(name);
+            if (stock == null)
+                return NotFound();
+
+            return Ok(stock);
+        }
+
+        [Authorize("AdminOnly")]
+        [HttpDelete("{symbol}")]
+        public async Task<IActionResult> DeleteStock(string symbol)
+        {
+            var stock = await _stockDataService.GetStockBySymbolAsync(symbol);
+            if (stock == null)
+                return NotFound();
+
+            await _stockDataService.DeleteStockAsync(stock);
+            return Ok("Stock başarıyla silindi.");
         }
 
     }

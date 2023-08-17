@@ -54,6 +54,18 @@ namespace StockMarket.Business.Concrete
             };
             await _transactionRepository.AddTransactionAsync(transaction);
 
+            var userPortfolio = await _portfolioRepository.GetPortfolioByUserIdAsync(userId);
+            
+            var newStockData = new StockData
+            {
+                Symbol = symbol,
+                Quantity = quantity
+            };
+            userPortfolio.StockData.Add(newStockData);
+
+            // Portföyü güncelle
+            await _portfolioRepository.UpdatePortfolioAsync(userPortfolio);
+
             return true;
         }
 
@@ -73,7 +85,7 @@ namespace StockMarket.Business.Concrete
                 return false; // Kullanıcı hesabı yoksa işlem yapılamaz
             }
 
-            var userStockQuantity = _portfolioRepository.GetStockQuantityForUser(userId, symbol);
+            var userStockQuantity = await _portfolioRepository.GetStockQuantityForUserAsync(userId, symbol);
 
             if (userStockQuantity < quantity)
             {
@@ -96,8 +108,22 @@ namespace StockMarket.Business.Concrete
                 TransactionDate = DateTime.UtcNow
             };
             await _transactionRepository.AddTransactionAsync(transaction);
+            
+            var userPortfolio = await _portfolioRepository.GetPortfolioByUserIdAsync(userId);
+
+            if (userPortfolio != null)
+            {
+                var stockDataToRemove = userPortfolio.StockData.FirstOrDefault(sd => sd.Symbol == symbol);
+
+                if (stockDataToRemove != null)
+                {
+                    userPortfolio.StockData.Remove(stockDataToRemove);
+                    await _portfolioRepository.UpdatePortfolioAsync(userPortfolio);
+                }
+            }
 
             return true;
         }
     }
 }
+

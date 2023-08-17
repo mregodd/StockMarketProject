@@ -25,27 +25,27 @@ namespace StockMarket.Business.Concrete
             var stockData = await _stockDataFetcher.FetchStockData(symbol);
             _stockRepository.AddStock(stockData);
         }
-        public void AddStock(StockData stockData)
+        public async Task AddStockAsync(StockData stockData)
         {
             _stockRepository.AddStock(stockData);
         }
 
-        public void DeleteStock(StockData stockData)
+        public async Task DeleteStockAsync(StockData stockData)
         {
             _stockRepository.DeleteStock(stockData);
         }
 
-        public StockData GetStockByName(string name)
+        public async Task<StockData> GetStockByNameAsync(string name)
         {
             return _stockRepository.GetStockByName(name);
         }
 
-        public StockData GetStockBySymbol(string symbol)
+        public async Task<StockData> GetStockBySymbolAsync(string symbol)
         {
             return _stockRepository.GetStockBySymbol(symbol);
         }
 
-        public async Task UpdateStockData()
+        public async Task UpdateStockDataAsync()
         {
             var symbols = new List<string> { "AAPL", "GOOGL", "MSFT" }; // Güncellenecek semboller
 

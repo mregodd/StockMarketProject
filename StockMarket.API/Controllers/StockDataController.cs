@@ -19,9 +19,9 @@ namespace StockMarket.API.Controllers
         }
 
         [HttpGet("{symbol}")]
-        public IActionResult GetStockBySymbol(string symbol)
+        public async Task<IActionResult> GetStockBySymbol(string symbol)
         {
-            var stock = _stockDataService.GetStockBySymbol(symbol);
+            var stock = await _stockDataService.GetStockBySymbolAsync(symbol);
             if (stock == null)
                 return NotFound();
 
@@ -29,9 +29,9 @@ namespace StockMarket.API.Controllers
         }
 
         [HttpGet("StockName/{name}")]
-        public IActionResult GetStockByName(string name)
+        public async Task<IActionResult> GetStockByName(string name)
         {
-            var stock = _stockDataService.GetStockByName(name);
+            var stock = await _stockDataService.GetStockByNameAsync(name);
             if (stock == null)
                 return NotFound();
 
@@ -40,13 +40,13 @@ namespace StockMarket.API.Controllers
         
         [Authorize("AdminOnly")]
         [HttpDelete("{symbol}")]
-        public IActionResult DeleteStock(string symbol)
+        public async Task<IActionResult> DeleteStock(string symbol)
         {
-            var stock = _stockDataService.GetStockBySymbol(symbol);
+            var stock = await  _stockDataService.GetStockBySymbolAsync(symbol);
             if (stock == null)
                 return NotFound();
 
-            _stockDataService.DeleteStock(stock);
+            await _stockDataService.DeleteStockAsync(stock);
             return Ok("Stock başarıyla silindi.");
         }
     }

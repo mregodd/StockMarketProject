@@ -8,6 +8,6 @@ namespace StockMarket.Business.Concrete
         Task UpdateUser(AppUser user);
         Task DeleteUser(int userId);
         Task<AppUser> GetUserById(int userId);
-        // Diğer kullanıcı işlemleri için gerekli metotları buraya ekleyebilirsiniz.
+        
     }
 }

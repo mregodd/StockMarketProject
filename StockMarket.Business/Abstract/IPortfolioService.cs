@@ -9,12 +9,12 @@ namespace StockMarket.Business.Abstract
 {
     public interface IPortfolioService
     {
-        void AddPortfolio(UserPortfolio portfolio);
-        UserPortfolio GetPortfolioByUserId(int userId);
-        void UpdatePortfolio(UserPortfolio portfolio);
-        void DeletePortfolio(int portfolioId);
-        UserPortfolio GetPortfolioByUserIdAndStock(int userId, string stockName);
-        UserPortfolio GetPortfolioById(int id);
-        int GetStockQuantityForUser(int userId, string symbol);
+        Task AddPortfolioAsync(UserPortfolio portfolio);
+        Task<UserPortfolio> GetPortfolioByUserIdAsync(int userId);
+        Task UpdatePortfolioAsync(UserPortfolio portfolio);
+        Task DeletePortfolioAsync(int portfolioId);
+        Task<UserPortfolio> GetPortfolioByUserIdAndStockAsync(int userId, string stockName);
+        Task<UserPortfolio> GetPortfolioByIdAsync(int id);
+        Task<int> GetStockQuantityForUserAsync(int userId, string symbol);
     }
 }

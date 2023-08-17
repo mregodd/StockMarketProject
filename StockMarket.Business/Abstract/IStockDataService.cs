@@ -10,10 +10,10 @@ namespace StockMarket.Business.Abstract
     public interface IStockDataService
     {
         Task AddStockDataToDatabase(string symbol);
-        void AddStock(StockData stockData);
-        Task UpdateStockData();
-        void DeleteStock(StockData stockData);
-        StockData GetStockBySymbol(string symbol);
-        StockData GetStockByName(string name);
+        Task AddStockAsync(StockData stockData);
+        Task UpdateStockDataAsync();
+        Task DeleteStockAsync(StockData stockData);
+        Task<StockData> GetStockBySymbolAsync(string symbol);
+        Task<StockData> GetStockByNameAsync(string name);
     }
 }

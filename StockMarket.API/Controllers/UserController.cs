@@ -116,6 +116,19 @@ namespace StockMarket.API.Controllers
 
             return Ok("Kullanıcı başarıyla silindi.");
         }
+        
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetUserById(int userId)
+        {
+            var user = await _userService.GetUserById(userId);
+
+            if (user == null)
+            {
+                return NotFound("Kullanıcı bulunamadı.");
+            }
+
+            return Ok(user);
+        }
     }
 
     public class CreateUserModel
