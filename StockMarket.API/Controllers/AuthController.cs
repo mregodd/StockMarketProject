@@ -13,7 +13,7 @@ using StockMarket.Entities.Concrete;
 namespace StockMarket.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     public class AuthController : ControllerBase
     {
         private readonly UserManager<AppUser> _userManager;
@@ -69,8 +69,6 @@ namespace StockMarket.API.Controllers
 
                     await _portfolioService.AddPortfolioAsync(portfolio);
 
-                    // Token oluşturup döndürme
-                    var token = TokenHandler.CreateToken(_configuration, user);
                     // Kullanıcının bakiyesini ve portfolyosunu çekme
                     var balance = _balanceService.GetUserBalance(user.Id); // Bakiye çekimi
                     var userPortfolio = _portfolioService.GetPortfolioByUserIdAsync(user.Id); // Portfolyo çekimi
@@ -79,7 +77,6 @@ namespace StockMarket.API.Controllers
                     return Ok(new
                     {
                         Message = "Kullanıcı kaydı başarıyla oluşturuldu.",
-                        Token = token.AccessToken,
                         Username = user.UserName,
                         Balance = balance,
                         Portfolio = userPortfolio

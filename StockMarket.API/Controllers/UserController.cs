@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace StockMarket.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/user")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;

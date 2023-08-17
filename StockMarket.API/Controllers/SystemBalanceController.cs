@@ -5,7 +5,7 @@ using StockMarket.Business.Abstract;
 
 namespace StockMarket.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/systembalance")]
     [ApiController]
     [Authorize]
     public class SystemBalanceController : ControllerBase
@@ -25,7 +25,7 @@ namespace StockMarket.API.Controllers
                 return Ok("Sistem bakiyesi güncellendi.");
             }
 
-            [HttpGet("systembalance")]
+            [HttpGet]
             public IActionResult GetSystemBalance()
             {
                 var systemBalance = _systemBalanceService.GetSystemBalance();

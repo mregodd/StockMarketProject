@@ -31,8 +31,20 @@ namespace StockMarket.Business.Concrete
         {
             // Kullanıcının bakiyesine amount kadar para eklemek için veri erişim katmanını kullanın
             var userBalance = _balanceRepository.GetUserBalance(userId);
-            userBalance.Balance += amount;
-            _balanceRepository.UpdateUserBalance(userBalance);
+            if (userBalance == null)
+            {
+                userBalance = new UserBalance
+                {
+                    AppUserId = userId,
+                    Balance = amount
+                };
+                _balanceRepository.AddUserBalance(userBalance); // Yeni bakiye ekleyin
+            }
+            else
+            {
+                userBalance.Balance += amount;
+                _balanceRepository.UpdateUserBalance(userBalance);
+            }
         }
 
         public void SubtractUserBalance(int userId, decimal amount)
