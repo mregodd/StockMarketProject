@@ -20,18 +20,16 @@ namespace StockMarket.API.Controllers
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IPortfolioService _portfolioService;
         private readonly IBalanceService _balanceService;
-        private readonly ISystemBalanceService _systemBalanceService;
         private readonly IConfiguration _configuration;
 
 
-        public AuthController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration configuration, IPortfolioService portfolioService, IBalanceService balanceService,ISystemBalanceService systemBalanceService)
+        public AuthController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration configuration, IPortfolioService portfolioService, IBalanceService balanceService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
             _portfolioService = portfolioService;
             _balanceService = balanceService;
-            _systemBalanceService = systemBalanceService;
 
         }
 
@@ -83,10 +81,10 @@ namespace StockMarket.API.Controllers
                         Message = "Kullanıcı kaydı başarıyla oluşturuldu.",
                         Token = token.AccessToken,
                         Username = user.UserName,
-                        Balance = balance, 
+                        Balance = balance,
                         Portfolio = userPortfolio
                     });
-            }
+                }
 
                 // Kullanıcı oluşturulamadı, hataları döndürün.
                 return BadRequest(result.Errors);
@@ -111,9 +109,9 @@ namespace StockMarket.API.Controllers
                     if (result.Succeeded)
                     {
                         var token = TokenHandler.CreateToken(_configuration, user);
-                        var balance = _balanceService.GetUserBalance(user.Id); 
+                        var balance = _balanceService.GetUserBalance(user.Id);
                         var userPortfolio = _portfolioService.GetPortfolioByUserId(user.Id);
-                        
+
                         return Ok(new
                         {
                             Message = "Giriş başarılı.",
@@ -132,23 +130,8 @@ namespace StockMarket.API.Controllers
             // Model geçersiz, hataları döndürün.
             return BadRequest(ModelState);
         }
-        
-        [Authorize("AdminOnly")]
-        [HttpPost("updatesystembalance")]
-        public IActionResult UpdateSystemBalance([FromBody] decimal newBalance)
-        {
-            _systemBalanceService.UpdateSystemBalance(newBalance);
-            return Ok("Sistem bakiyesi güncellendi.");
-        }
 
-        [HttpGet("systembalance")]
-        public IActionResult GetSystemBalance()
-        {
-            var systemBalance = _systemBalanceService.GetSystemBalance();
-            return Ok(new { SystemBalance = systemBalance });
-        }
-
-    }
+    }     
 
 
     // Bu modeli RegisterModel olarak varsayalım, yeni kullanıcı oluşturmak için gerekli bilgileri içerir.
