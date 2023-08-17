@@ -56,6 +56,24 @@ namespace StockMarket.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "StockTransactions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    Symbol = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TransactionDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StockTransactions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SystemBalances",
                 columns: table => new
                 {
@@ -178,12 +196,14 @@ namespace StockMarket.DataAccess.Migrations
                 name: "UserBalances",
                 columns: table => new
                 {
-                    AppUserId = table.Column<int>(type: "int", nullable: false),
-                    Balance = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Balance = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    AppUserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserBalances", x => x.AppUserId);
+                    table.PrimaryKey("PK_UserBalances", x => x.Id);
                     table.ForeignKey(
                         name: "FK_UserBalances_AspNetUsers_AppUserId",
                         column: x => x.AppUserId,
@@ -212,6 +232,28 @@ namespace StockMarket.DataAccess.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StockDatas",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Symbol = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StockName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    UserPortfolioId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StockDatas", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StockDatas_UserPortfolios_UserPortfolioId",
+                        column: x => x.UserPortfolioId,
+                        principalTable: "UserPortfolios",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -254,6 +296,16 @@ namespace StockMarket.DataAccess.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_StockDatas_UserPortfolioId",
+                table: "StockDatas",
+                column: "UserPortfolioId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserBalances_AppUserId",
+                table: "UserBalances",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserPortfolios_AppUserId",
                 table: "UserPortfolios",
                 column: "AppUserId");
@@ -277,16 +329,22 @@ namespace StockMarket.DataAccess.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "StockDatas");
+
+            migrationBuilder.DropTable(
+                name: "StockTransactions");
+
+            migrationBuilder.DropTable(
                 name: "SystemBalances");
 
             migrationBuilder.DropTable(
                 name: "UserBalances");
 
             migrationBuilder.DropTable(
-                name: "UserPortfolios");
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                name: "UserPortfolios");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

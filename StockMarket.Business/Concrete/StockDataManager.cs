@@ -13,8 +13,8 @@ namespace StockMarket.Business.Concrete
     {
 
         private readonly IStockDataRepository _stockRepository;
-        private readonly IStockDataFetcher _stockDataFetcher;
-        public StockDataManager(IStockDataRepository stockRepository, IStockDataFetcher stockDataFetcher)
+        private readonly IStockDataFetcherService _stockDataFetcher;
+        public StockDataManager(IStockDataRepository stockRepository, IStockDataFetcherService stockDataFetcher)
         {
             _stockRepository = stockRepository;
             _stockDataFetcher = stockDataFetcher;

@@ -1,26 +1,29 @@
-﻿using System.Net.Http;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using StockMarket.Business.Abstract;
+using StockMarket.DataAccess.Abstract;
 using StockMarket.Entities.Concrete;
 
-namespace StockMarket.Business.Concrete
+
+namespace StockMarket.DataAccess.Repositories
 {
-    public class StockDataFetcher : IStockDataFetcherService
+    public class StockDataFetcherRepository : IStockDataFetcherRepository
     {
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IConfiguration _configuration;
 
-        public StockDataFetcher(IHttpClientFactory httpClientFactory)
+        public StockDataFetcherRepository(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
             _httpClientFactory = httpClientFactory;
+            _configuration = configuration;
         }
 
         public async Task<StockData> FetchStockData(string symbol)
         {
-            var apiKey = "3e89b3b45amsh277eb57ca06e20dp14c15ajsndbc08622f03e"; // RapidAPI'den aldığınız API anahtarı
+            var apiKey = _configuration["RapidAPI:ApiKey"];
+
             var httpClient = _httpClientFactory.CreateClient();
 
-            var endpointUrl = $"https://mboum-finance.p.rapidapi.com/qu/quote/financial-data?symbol={symbol}"; // RapidAPI endpoint'i
+            var endpointUrl = $"https://mboum-finance.p.rapidapi.com/qu/quote/financial-data?symbol={symbol}";
             httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Key", apiKey);
 
             var response = await httpClient.GetAsync(endpointUrl);
@@ -29,13 +32,6 @@ namespace StockMarket.Business.Concrete
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var stockData = JsonConvert.DeserializeObject<StockData>(responseContent);
-
-                // Burada API'den dönen verilere göre StockName değerini doldurabilirsiniz.
-                // Örnek olarak:
-                stockData.StockName = "Apple Inc."; // Burada StockName'i elle dolduruyoruz
-                stockData.Symbol = "AAPL"; //Symbol elle dolduruyoruz
-
-
                 return stockData;
             }
             else
@@ -46,3 +42,4 @@ namespace StockMarket.Business.Concrete
         }
     }
 }
+

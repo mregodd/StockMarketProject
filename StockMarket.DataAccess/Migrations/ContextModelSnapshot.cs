@@ -238,7 +238,7 @@ namespace StockMarket.DataAccess.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("StockMarket.Entities.Concrete.Stock", b =>
+            modelBuilder.Entity("StockMarket.Entities.Concrete.StockData", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -267,7 +267,7 @@ namespace StockMarket.DataAccess.Migrations
 
                     b.HasIndex("UserPortfolioId");
 
-                    b.ToTable("Stocks", (string)null);
+                    b.ToTable("StockDatas");
                 });
 
             modelBuilder.Entity("StockMarket.Entities.Concrete.StockTransaction", b =>
@@ -299,7 +299,7 @@ namespace StockMarket.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("StockTransactions", (string)null);
+                    b.ToTable("StockTransactions");
                 });
 
             modelBuilder.Entity("StockMarket.Entities.Concrete.SystemBalance", b =>
@@ -315,7 +315,7 @@ namespace StockMarket.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SystemBalances", (string)null);
+                    b.ToTable("SystemBalances");
                 });
 
             modelBuilder.Entity("StockMarket.Entities.Concrete.UserBalance", b =>
@@ -336,7 +336,7 @@ namespace StockMarket.DataAccess.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.ToTable("UserBalances", (string)null);
+                    b.ToTable("UserBalances");
                 });
 
             modelBuilder.Entity("StockMarket.Entities.Concrete.UserPortfolio", b =>
@@ -364,7 +364,7 @@ namespace StockMarket.DataAccess.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.ToTable("UserPortfolios", (string)null);
+                    b.ToTable("UserPortfolios");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -418,7 +418,7 @@ namespace StockMarket.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("StockMarket.Entities.Concrete.Stock", b =>
+            modelBuilder.Entity("StockMarket.Entities.Concrete.StockData", b =>
                 {
                     b.HasOne("StockMarket.Entities.Concrete.UserPortfolio", null)
                         .WithMany("Stocks")

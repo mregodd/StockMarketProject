@@ -45,7 +45,8 @@ builder.Services.AddScoped<ISystemBalanceService, SystemBalanceManager>();
 builder.Services.AddScoped<ISystemBalanceRepository, SystemBalanceRepository>();
 builder.Services.AddScoped<IStockDataRepository, StockDataRepository>();
 builder.Services.AddScoped<IStockDataService, StockDataManager>();
-builder.Services.AddScoped<IStockDataFetcher, StockDataFetcher>();
+builder.Services.AddScoped<IStockDataFetcherService, StockDataFetcher>();
+builder.Services.AddScoped<IStockDataFetcherRepository, StockDataFetcherRepository>();
 
 builder.Services.AddHostedService<StockUpdateService>();
 

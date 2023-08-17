@@ -14,10 +14,10 @@ namespace StockMarket.API.Controllers
     public class StockMarketController : ControllerBase
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        private readonly IStockDataFetcher _stockDataFetcher;
+        private readonly IStockDataFetcherService _stockDataFetcher;
         private readonly IStockDataService _stockService;
 
-        public StockMarketController(IHttpClientFactory httpClientFactory, IStockDataFetcher stockDataFetcher, IStockDataService stockService)
+        public StockMarketController(IHttpClientFactory httpClientFactory, IStockDataFetcherService stockDataFetcher, IStockDataService stockService)
         {
             _httpClientFactory = httpClientFactory;
             _stockDataFetcher = stockDataFetcher;
@@ -32,7 +32,7 @@ namespace StockMarket.API.Controllers
                 var request = new HttpRequestMessage
                 {
                     Method = HttpMethod.Get,
-                    RequestUri = new Uri("https://yahoo-finance15.p.rapidapi.com/api/yahoo/ne/news"),
+                    RequestUri = new Uri("https://mboum-finance.p.rapidapi.com/ne/news"),
                 };
 
                 // Kullanıcı JWT tokenını Authorization başlığında gönder
@@ -40,7 +40,7 @@ namespace StockMarket.API.Controllers
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 client.DefaultRequestHeaders.Add("X-RapidAPI-Key", "3e89b3b45amsh277eb57ca06e20dp14c15ajsndbc08622f03e");
-                client.DefaultRequestHeaders.Add("X-RapidAPI-Host", "yahoo-finance15.p.rapidapi.com");
+                client.DefaultRequestHeaders.Add("X-RapidAPI-Host", "mboum-finance.p.rapidapi.com");
 
                 using (var response = await client.SendAsync(request))
                 {
@@ -65,7 +65,7 @@ namespace StockMarket.API.Controllers
                 var token = HttpContext.Request.Headers["Authorization"];
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 client.DefaultRequestHeaders.Add("X-RapidAPI-Key", "3e89b3b45amsh277eb57ca06e20dp14c15ajsndbc08622f03e");
-                client.DefaultRequestHeaders.Add("X-RapidAPI-Host", "yahoo-finance15.p.rapidapi.com");
+                client.DefaultRequestHeaders.Add("X-RapidAPI-Host", "mboum-finance.p.rapidapi.com");
 
                 using (var response = await client.SendAsync(request))
                 {
@@ -88,7 +88,7 @@ namespace StockMarket.API.Controllers
                     Symbol = stockData.Symbol,
                     StockName = stockData.StockName,
                     Price = stockData.Price,
-                    // Diğer gerekli özellikleri doldurabilirsiniz
+                    Quantity = stockData.Quantity
                 };
 
                 // Veriyi veritabanına kaydet

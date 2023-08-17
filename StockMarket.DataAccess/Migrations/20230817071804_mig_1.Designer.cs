@@ -12,8 +12,8 @@ using StockMarket.DataAccess.Concrete;
 namespace StockMarket.DataAccess.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20230816103953_mig_stocktransaction")]
-    partial class mig_stocktransaction
+    [Migration("20230817071804_mig_1")]
+    partial class mig_1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -240,7 +240,7 @@ namespace StockMarket.DataAccess.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("StockMarket.Entities.Concrete.Stock", b =>
+            modelBuilder.Entity("StockMarket.Entities.Concrete.StockData", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -269,7 +269,7 @@ namespace StockMarket.DataAccess.Migrations
 
                     b.HasIndex("UserPortfolioId");
 
-                    b.ToTable("Stocks");
+                    b.ToTable("StockDatas");
                 });
 
             modelBuilder.Entity("StockMarket.Entities.Concrete.StockTransaction", b =>
@@ -420,7 +420,7 @@ namespace StockMarket.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("StockMarket.Entities.Concrete.Stock", b =>
+            modelBuilder.Entity("StockMarket.Entities.Concrete.StockData", b =>
                 {
                     b.HasOne("StockMarket.Entities.Concrete.UserPortfolio", null)
                         .WithMany("Stocks")
